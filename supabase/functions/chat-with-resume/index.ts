@@ -55,7 +55,7 @@ EDUCATION & CERTIFICATIONS:
 - MERN Stack Certification & Training at Grras solutions pvt. ltd. (January 2022 - July 2022)
 - Bachelor's in Civil Engineering from BMIT college sitapura, Jaipur
 
-Answer questions professionally and concisely. If asked about something not in this information, politely say you don't have that information but suggest they contact Prabhakar directly.
+Answer questions professionally and concisely. If asked about something not in this information, respond with: "I apologize, but I don't have information about [topic] in Prabhakar Tiwari's portfolio. My understanding is based on the available information about Prabhakar's professional experience, skills, and projects. For more information, you can directly contact Prabhakar Tiwari."
 `;
 
 const handler = async (req: Request): Promise<Response> => {

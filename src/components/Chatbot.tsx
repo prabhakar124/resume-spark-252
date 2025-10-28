@@ -31,7 +31,11 @@ export const Chatbot = () => {
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [questionCount, setQuestionCount] = useState(0);
+  const [isChatLimitReached, setIsChatLimitReached] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const MAX_QUESTIONS = 15;
+  const MAX_WORDS = 200;
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -55,6 +59,14 @@ export const Chatbot = () => {
             content: msg.content,
           }));
           setMessages(loadedMessages);
+          
+          // Count user questions
+          const userQuestions = loadedMessages.filter((msg: Message) => msg.role === "user").length;
+          setQuestionCount(userQuestions);
+          
+          if (userQuestions >= MAX_QUESTIONS) {
+            setIsChatLimitReached(true);
+          }
         }
       } catch (error) {
         console.error("Error loading messages:", error);
@@ -75,13 +87,29 @@ export const Chatbot = () => {
   };
 
   const sendMessage = async () => {
-    if (!input.trim() || isLoading) return;
+    if (!input.trim() || isLoading || isChatLimitReached) return;
+
+    // Validate word count
+    const wordCount = input.trim().split(/\s+/).length;
+    if (wordCount > MAX_WORDS) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content: `Please limit your question to ${MAX_WORDS} words or less. Your message has ${wordCount} words.`,
+        },
+      ]);
+      return;
+    }
 
     const userMessage: Message = { role: "user", content: input };
     setMessages((prev) => [...prev, userMessage]);
     await saveMessage(userMessage);
     setInput("");
     setIsLoading(true);
+    
+    const newQuestionCount = questionCount + 1;
+    setQuestionCount(newQuestionCount);
 
     try {
       const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat-with-resume`;
@@ -152,6 +180,14 @@ export const Chatbot = () => {
       if (finalAssistantMessage) {
         await saveMessage({ role: "assistant", content: finalAssistantMessage });
       }
+
+      // Check if question limit reached
+      if (newQuestionCount >= MAX_QUESTIONS) {
+        setIsChatLimitReached(true);
+        const limitMessage = "For more information, you can directly contact Prabhakar Tiwari.";
+        setMessages((prev) => [...prev, { role: "assistant", content: limitMessage }]);
+        await saveMessage({ role: "assistant", content: limitMessage });
+      }
     } catch (error) {
       console.error("Error:", error);
       setMessages((prev) => [
@@ -201,7 +237,7 @@ export const Chatbot = () => {
                       msg.role === "user" ? "justify-end" : "justify-start"
                     }`}
                   >
-                    <div
+                     <div
                       className={`max-w-[85%] rounded-lg px-4 py-2.5 ${
                         msg.role === "user"
                           ? "bg-primary text-primary-foreground"
@@ -211,6 +247,16 @@ export const Chatbot = () => {
                       <p className="text-sm leading-relaxed whitespace-pre-wrap break-words">
                         {msg.content}
                       </p>
+                      {msg.role === "assistant" && 
+                       msg.content.toLowerCase().includes("contact prabhakar") && (
+                        <Button
+                          size="sm"
+                          className="mt-2 w-full"
+                          onClick={() => window.location.href = "mailto:prabhakartiwari0209@gmail.com"}
+                        >
+                          Contact via Email
+                        </Button>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -229,24 +275,38 @@ export const Chatbot = () => {
               </div>
             </div>
             <div className="p-4 border-t bg-background">
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  sendMessage();
-                }}
-                className="flex gap-2"
-              >
-                <Input
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  placeholder="Ask a question..."
-                  disabled={isLoading}
-                  className="flex-1"
-                />
-                <Button type="submit" size="icon" disabled={isLoading || !input.trim()}>
-                  <Send className="h-4 w-4" />
-                </Button>
-              </form>
+              {isChatLimitReached ? (
+                <div className="text-center text-sm text-muted-foreground py-2">
+                  Chat limit reached. Please contact Prabhakar directly for more information.
+                </div>
+              ) : (
+                <>
+                  <div className="text-xs text-muted-foreground mb-2 text-right">
+                    {questionCount}/{MAX_QUESTIONS} questions
+                  </div>
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      sendMessage();
+                    }}
+                    className="flex gap-2"
+                  >
+                    <Input
+                      value={input}
+                      onChange={(e) => setInput(e.target.value)}
+                      placeholder="Ask a question..."
+                      disabled={isLoading}
+                      className="flex-1"
+                    />
+                    <Button type="submit" size="icon" disabled={isLoading || !input.trim()}>
+                      <Send className="h-4 w-4" />
+                    </Button>
+                  </form>
+                  <div className="text-xs text-muted-foreground mt-1">
+                    Max {MAX_WORDS} words per question
+                  </div>
+                </>
+              )}
             </div>
           </CardContent>
         </Card>
