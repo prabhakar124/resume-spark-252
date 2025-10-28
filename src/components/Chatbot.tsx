@@ -4,14 +4,25 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MessageCircle, X, Send } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Message {
   role: "user" | "assistant";
   content: string;
 }
 
+const getOrCreateSessionId = () => {
+  let sessionId = localStorage.getItem("chat_session_id");
+  if (!sessionId) {
+    sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    localStorage.setItem("chat_session_id", sessionId);
+  }
+  return sessionId;
+};
+
 export const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [sessionId] = useState(getOrCreateSessionId);
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
@@ -20,19 +31,48 @@ export const Chatbot = () => {
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  useEffect(() => {
+    const loadMessages = async () => {
+      const { data } = await supabase
+        .from("chat_messages")
+        .select("*")
+        .eq("session_id", sessionId)
+        .order("created_at", { ascending: true });
+
+      if (data && data.length > 0) {
+        const loadedMessages = data.map((msg) => ({
+          role: msg.role as "user" | "assistant",
+          content: msg.content,
+        }));
+        setMessages(loadedMessages);
+      }
+    };
+
+    if (isOpen) {
+      loadMessages();
+    }
+  }, [isOpen, sessionId]);
+
+  const saveMessage = async (message: Message) => {
+    await supabase.from("chat_messages").insert({
+      session_id: sessionId,
+      role: message.role,
+      content: message.content,
+    });
+  };
 
   const sendMessage = async () => {
     if (!input.trim() || isLoading) return;
 
     const userMessage: Message = { role: "user", content: input };
     setMessages((prev) => [...prev, userMessage]);
+    await saveMessage(userMessage);
     setInput("");
     setIsLoading(true);
 
@@ -57,6 +97,7 @@ export const Chatbot = () => {
 
       // Add empty assistant message that we'll update
       setMessages((prev) => [...prev, { role: "assistant", content: "" }]);
+      let finalAssistantMessage = "";
 
       while (!streamDone) {
         const { done, value } = await reader.read();
@@ -83,6 +124,7 @@ export const Chatbot = () => {
             const content = parsed.choices?.[0]?.delta?.content;
             if (content) {
               assistantMessage += content;
+              finalAssistantMessage = assistantMessage;
               setMessages((prev) => {
                 const newMessages = [...prev];
                 const lastMessage = newMessages[newMessages.length - 1];
@@ -97,6 +139,11 @@ export const Chatbot = () => {
             break;
           }
         }
+      }
+
+      // Save the complete assistant message
+      if (finalAssistantMessage) {
+        await saveMessage({ role: "assistant", content: finalAssistantMessage });
       }
     } catch (error) {
       console.error("Error:", error);
@@ -125,20 +172,21 @@ export const Chatbot = () => {
       )}
 
       {isOpen && (
-        <Card className="fixed bottom-6 right-6 w-96 h-[600px] shadow-2xl z-50 flex flex-col">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
+        <Card className="fixed bottom-6 right-6 w-[400px] h-[600px] shadow-2xl z-50 flex flex-col overflow-hidden">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 border-b">
             <CardTitle className="text-lg">Ask About Prabhakar</CardTitle>
             <Button
               variant="ghost"
               size="icon"
               onClick={() => setIsOpen(false)}
+              className="h-8 w-8"
             >
-              <X className="h-5 w-5" />
+              <X className="h-4 w-4" />
             </Button>
           </CardHeader>
-          <CardContent className="flex-1 flex flex-col p-0">
-            <ScrollArea className="flex-1 px-4" ref={scrollRef}>
-              <div className="space-y-4 pb-4">
+          <CardContent className="flex-1 flex flex-col p-0 overflow-hidden">
+            <div className="flex-1 overflow-y-auto px-4 py-4">
+              <div className="space-y-4">
                 {messages.map((msg, idx) => (
                   <div
                     key={idx}
@@ -147,30 +195,33 @@ export const Chatbot = () => {
                     }`}
                   >
                     <div
-                      className={`max-w-[80%] rounded-lg px-4 py-2 ${
+                      className={`max-w-[85%] rounded-lg px-4 py-2.5 ${
                         msg.role === "user"
                           ? "bg-primary text-primary-foreground"
-                          : "bg-muted"
+                          : "bg-muted text-foreground"
                       }`}
                     >
-                      {msg.content}
+                      <p className="text-sm leading-relaxed whitespace-pre-wrap break-words">
+                        {msg.content}
+                      </p>
                     </div>
                   </div>
                 ))}
                 {isLoading && (
                   <div className="flex justify-start">
-                    <div className="bg-muted rounded-lg px-4 py-2">
+                    <div className="bg-muted rounded-lg px-4 py-2.5">
                       <div className="flex gap-1">
                         <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" />
-                        <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce delay-100" />
-                        <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce delay-200" />
+                        <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce [animation-delay:0.1s]" />
+                        <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce [animation-delay:0.2s]" />
                       </div>
                     </div>
                   </div>
                 )}
+                <div ref={messagesEndRef} />
               </div>
-            </ScrollArea>
-            <div className="p-4 border-t">
+            </div>
+            <div className="p-4 border-t bg-background">
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
@@ -183,6 +234,7 @@ export const Chatbot = () => {
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Ask a question..."
                   disabled={isLoading}
+                  className="flex-1"
                 />
                 <Button type="submit" size="icon" disabled={isLoading || !input.trim()}>
                   <Send className="h-4 w-4" />
