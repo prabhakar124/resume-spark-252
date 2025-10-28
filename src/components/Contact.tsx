@@ -6,6 +6,26 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Mail, MapPin, Phone } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { z } from "zod";
+
+const contactSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(1, { message: "Name is required" })
+    .max(100, { message: "Name must be less than 100 characters" })
+    .regex(/^[a-zA-Z\s]+$/, { message: "Name can only contain letters and spaces" }),
+  email: z
+    .string()
+    .trim()
+    .email({ message: "Invalid email address" })
+    .max(255, { message: "Email must be less than 255 characters" }),
+  message: z
+    .string()
+    .trim()
+    .min(10, { message: "Message must be at least 10 characters" })
+    .max(1000, { message: "Message must be less than 1000 characters" }),
+});
 
 export const Contact = () => {
   const { toast } = useToast();
@@ -21,10 +41,34 @@ export const Contact = () => {
     setIsSubmitting(true);
 
     try {
+      // Validate input data
+      const validatedData = contactSchema.parse(formData);
+
+      // Check rate limit (stored in localStorage)
+      const lastSubmission = localStorage.getItem("last_contact_submission");
+      if (lastSubmission) {
+        const timeSinceLastSubmission = Date.now() - parseInt(lastSubmission);
+        const minutesSinceLastSubmission = timeSinceLastSubmission / 1000 / 60;
+        
+        if (minutesSinceLastSubmission < 5) {
+          toast({
+            title: "Rate limit exceeded",
+            description: `Please wait ${Math.ceil(5 - minutesSinceLastSubmission)} more minutes before submitting another message.`,
+            variant: "destructive",
+          });
+          setIsSubmitting(false);
+          return;
+        }
+      }
+
       // Save to database
       const { error: dbError } = await supabase
         .from("contacts")
-        .insert([formData]);
+        .insert([{
+          name: validatedData.name,
+          email: validatedData.email,
+          message: validatedData.message,
+        }]);
 
       if (dbError) throw dbError;
 
@@ -32,11 +76,14 @@ export const Contact = () => {
       const { error: emailError } = await supabase.functions.invoke(
         "send-contact-email",
         {
-          body: formData,
+          body: validatedData,
         }
       );
 
       if (emailError) throw emailError;
+
+      // Update rate limit timestamp
+      localStorage.setItem("last_contact_submission", Date.now().toString());
 
       toast({
         title: "Message sent!",
@@ -45,12 +92,20 @@ export const Contact = () => {
 
       setFormData({ name: "", email: "", message: "" });
     } catch (error) {
-      console.error("Error:", error);
-      toast({
-        title: "Error",
-        description: "Failed to send message. Please try again.",
-        variant: "destructive",
-      });
+      if (error instanceof z.ZodError) {
+        const firstError = error.errors[0];
+        toast({
+          title: "Validation Error",
+          description: firstError.message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: "Failed to send message. Please try again.",
+          variant: "destructive",
+        });
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -105,6 +160,7 @@ export const Contact = () => {
                     onChange={(e) =>
                       setFormData({ ...formData, name: e.target.value })
                     }
+                    maxLength={100}
                     required
                   />
                 </div>
@@ -116,19 +172,24 @@ export const Contact = () => {
                     onChange={(e) =>
                       setFormData({ ...formData, email: e.target.value })
                     }
+                    maxLength={255}
                     required
                   />
                 </div>
                 <div>
                   <Textarea
-                    placeholder="Your Message"
+                    placeholder="Your Message (minimum 10 characters)"
                     value={formData.message}
                     onChange={(e) =>
                       setFormData({ ...formData, message: e.target.value })
                     }
+                    maxLength={1000}
                     required
                     rows={5}
                   />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {formData.message.length}/1000 characters
+                  </p>
                 </div>
                 <Button type="submit" className="w-full" disabled={isSubmitting}>
                   {isSubmitting ? "Sending..." : "Send Message"}
