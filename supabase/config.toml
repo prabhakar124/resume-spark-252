@@ -1,1 +1,10 @@
 project_id = "tmigikfogjqjclxiksdy"
+
+[functions.send-contact-email]
+verify_jwt = false
+
+[functions.chat-with-resume]
+verify_jwt = false
+
+[functions.get-chat-messages]
+verify_jwt = false

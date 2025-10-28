@@ -39,18 +39,25 @@ export const Chatbot = () => {
 
   useEffect(() => {
     const loadMessages = async () => {
-      const { data } = await supabase
-        .from("chat_messages")
-        .select("*")
-        .eq("session_id", sessionId)
-        .order("created_at", { ascending: true });
+      try {
+        const { data, error } = await supabase.functions.invoke("get-chat-messages", {
+          body: { session_id: sessionId },
+        });
 
-      if (data && data.length > 0) {
-        const loadedMessages = data.map((msg) => ({
-          role: msg.role as "user" | "assistant",
-          content: msg.content,
-        }));
-        setMessages(loadedMessages);
+        if (error) {
+          console.error("Error loading messages:", error);
+          return;
+        }
+
+        if (data?.messages && data.messages.length > 0) {
+          const loadedMessages = data.messages.map((msg: any) => ({
+            role: msg.role as "user" | "assistant",
+            content: msg.content,
+          }));
+          setMessages(loadedMessages);
+        }
+      } catch (error) {
+        console.error("Error loading messages:", error);
       }
     };
 
