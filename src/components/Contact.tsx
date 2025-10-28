@@ -112,47 +112,57 @@ export const Contact = () => {
   };
 
   return (
-    <section id="contact" className="py-20 px-4">
+    <section id="contact" className="py-20 px-4 relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-accent/5 to-background -z-10" />
+      
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-4xl font-bold text-center mb-12">Get In Touch</h2>
+        <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 gradient-text">
+          Get In Touch
+        </h2>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="space-y-6">
-            <Card>
+          <div className="space-y-6 opacity-0 animate-slide-in-left">
+            <Card className="card-hover border-2 border-transparent hover:border-primary/20 bg-gradient-to-br from-card to-card/50 backdrop-blur">
               <CardHeader>
-                <CardTitle>Contact Information</CardTitle>
-                <CardDescription>Feel free to reach out through any of these channels</CardDescription>
+                <CardTitle className="text-2xl">Contact Information</CardTitle>
+                <CardDescription className="text-base">Feel free to reach out through any of these channels</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <Mail className="h-5 w-5 text-primary" />
+              <CardContent className="space-y-5">
+                <div className="flex items-center gap-4 group p-3 rounded-lg hover:bg-primary/5 transition-colors">
+                  <div className="p-2 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 group-hover:scale-110 transition-transform">
+                    <Mail className="h-5 w-5 text-primary" />
+                  </div>
                   <a
                     href="mailto:prabhakartiwari0209@gmail.com"
-                    className="hover:text-primary transition-colors"
+                    className="hover:text-primary transition-colors font-medium"
                   >
                     prabhakartiwari0209@gmail.com
                   </a>
                 </div>
-                <div className="flex items-center gap-3">
-                  <Phone className="h-5 w-5 text-primary" />
-                  <a href="tel:7073150463" className="hover:text-primary transition-colors">
+                <div className="flex items-center gap-4 group p-3 rounded-lg hover:bg-accent/5 transition-colors">
+                  <div className="p-2 rounded-lg bg-gradient-to-br from-accent/10 to-accent/5 group-hover:scale-110 transition-transform">
+                    <Phone className="h-5 w-5 text-accent" />
+                  </div>
+                  <a href="tel:7073150463" className="hover:text-accent transition-colors font-medium">
                     7073150463
                   </a>
                 </div>
-                <div className="flex items-center gap-3">
-                  <MapPin className="h-5 w-5 text-primary" />
-                  <span>Pratap Nagar, Jaipur, Rajasthan 302033</span>
+                <div className="flex items-center gap-4 p-3 rounded-lg">
+                  <div className="p-2 rounded-lg bg-gradient-to-br from-primary/10 to-accent/5">
+                    <MapPin className="h-5 w-5 text-primary" />
+                  </div>
+                  <span className="font-medium">Pratap Nagar, Jaipur, Rajasthan 302033</span>
                 </div>
               </CardContent>
             </Card>
           </div>
 
-          <Card>
+          <Card className="card-hover border-2 border-transparent hover:border-primary/20 bg-gradient-to-br from-card to-card/50 backdrop-blur opacity-0 animate-slide-in-right">
             <CardHeader>
-              <CardTitle>Send a Message</CardTitle>
-              <CardDescription>I'll get back to you as soon as possible</CardDescription>
+              <CardTitle className="text-2xl">Send a Message</CardTitle>
+              <CardDescription className="text-base">I'll get back to you as soon as possible</CardDescription>
             </CardHeader>
             <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-5">
                 <div>
                   <Input
                     placeholder="Your Name"
@@ -162,6 +172,7 @@ export const Contact = () => {
                     }
                     maxLength={100}
                     required
+                    className="focus:border-primary focus:ring-primary/20 transition-all"
                   />
                 </div>
                 <div>
@@ -174,6 +185,7 @@ export const Contact = () => {
                     }
                     maxLength={255}
                     required
+                    className="focus:border-primary focus:ring-primary/20 transition-all"
                   />
                 </div>
                 <div>
@@ -186,13 +198,21 @@ export const Contact = () => {
                     maxLength={1000}
                     required
                     rows={5}
+                    className="focus:border-primary focus:ring-primary/20 transition-all resize-none"
                   />
-                  <p className="text-xs text-muted-foreground mt-1">
+                  <p className="text-xs text-muted-foreground mt-2">
                     {formData.message.length}/1000 characters
                   </p>
                 </div>
-                <Button type="submit" className="w-full" disabled={isSubmitting}>
-                  {isSubmitting ? "Sending..." : "Send Message"}
+                <Button 
+                  type="submit" 
+                  className="w-full group relative overflow-hidden" 
+                  disabled={isSubmitting}
+                >
+                  <span className="relative z-10">
+                    {isSubmitting ? "Sending..." : "Send Message"}
+                  </span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary to-accent opacity-0 group-hover:opacity-100 transition-opacity" />
                 </Button>
               </form>
             </CardContent>

@@ -26,17 +26,29 @@ const skillCategories = [
 
 export const Skills = () => {
   return (
-    <section id="skills" className="py-20 px-4">
+    <section id="skills" className="py-20 px-4 relative">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-4xl font-bold text-center mb-12">Skills & Technologies</h2>
+        <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 gradient-text">
+          Skills & Technologies
+        </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {skillCategories.map((category) => (
-            <Card key={category.title} className="hover:shadow-lg transition-shadow">
+          {skillCategories.map((category, idx) => (
+            <Card 
+              key={category.title} 
+              className={`card-hover border-2 border-transparent hover:border-primary/20 bg-gradient-to-br from-card to-card/50 backdrop-blur opacity-0 animate-fade-in-up stagger-${Math.min(idx + 1, 6)}`}
+            >
               <CardContent className="pt-6">
-                <h3 className="text-xl font-semibold mb-4">{category.title}</h3>
+                <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-gradient-to-r from-primary to-accent" />
+                  {category.title}
+                </h3>
                 <div className="flex flex-wrap gap-2">
                   {category.skills.map((skill) => (
-                    <Badge key={skill} variant="secondary">
+                    <Badge 
+                      key={skill} 
+                      variant="secondary"
+                      className="hover:bg-primary hover:text-primary-foreground transition-colors cursor-default"
+                    >
                       {skill}
                     </Badge>
                   ))}
