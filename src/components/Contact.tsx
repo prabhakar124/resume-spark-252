@@ -3,10 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Mail, MapPin, Phone } from "lucide-react";
+import { Mail, MapPin, Phone, Send, MessageSquare } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { z } from "zod";
+import { motion } from "framer-motion";
 
 const contactSchema = z.object({
   name: z
@@ -27,6 +28,29 @@ const contactSchema = z.object({
     .max(1000, { message: "Message must be less than 1000 characters" }),
 });
 
+const contactInfo = [
+  {
+    icon: Mail,
+    label: "Email",
+    value: "prabhakartiwari0209@gmail.com",
+    href: "mailto:prabhakartiwari0209@gmail.com",
+    gradient: "from-blue-500 to-cyan-500",
+  },
+  {
+    icon: Phone,
+    label: "Phone",
+    value: "7073150463",
+    href: "tel:7073150463",
+    gradient: "from-green-500 to-emerald-500",
+  },
+  {
+    icon: MapPin,
+    label: "Location",
+    value: "Pratap Nagar, Jaipur, Rajasthan 302033",
+    gradient: "from-purple-500 to-pink-500",
+  },
+];
+
 export const Contact = () => {
   const { toast } = useToast();
   const [formData, setFormData] = useState({
@@ -41,10 +65,8 @@ export const Contact = () => {
     setIsSubmitting(true);
 
     try {
-      // Validate input data
       const validatedData = contactSchema.parse(formData);
 
-      // Check rate limit (stored in localStorage)
       const lastSubmission = localStorage.getItem("last_contact_submission");
       if (lastSubmission) {
         const timeSinceLastSubmission = Date.now() - parseInt(lastSubmission);
@@ -61,7 +83,6 @@ export const Contact = () => {
         }
       }
 
-      // Save to database
       const { error: dbError } = await supabase
         .from("contacts")
         .insert([{
@@ -72,7 +93,6 @@ export const Contact = () => {
 
       if (dbError) throw dbError;
 
-      // Send email via edge function
       const { error: emailError } = await supabase.functions.invoke(
         "send-contact-email",
         {
@@ -82,7 +102,6 @@ export const Contact = () => {
 
       if (emailError) throw emailError;
 
-      // Update rate limit timestamp
       localStorage.setItem("last_contact_submission", Date.now().toString());
 
       toast({
@@ -113,110 +132,187 @@ export const Contact = () => {
 
   return (
     <section id="contact" className="py-20 px-4 relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-accent/5 to-background -z-10" />
-      
-      <div className="max-w-6xl mx-auto">
-        <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 gradient-text">
-          Get In Touch
-        </h2>
+      {/* Background effects */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-accent/5 to-background" />
+      <div className="absolute top-0 left-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />
+
+      <div className="max-w-7xl mx-auto relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
+        >
+          <span className="inline-block px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium mb-4">
+            Let's Connect
+          </span>
+          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+            <span className="gradient-text">Get In Touch</span>
+          </h2>
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+            Have a project in mind or just want to chat? I'd love to hear from you!
+          </p>
+        </motion.div>
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="space-y-6 opacity-0 animate-slide-in-left">
-            <Card className="card-hover border-2 border-transparent hover:border-primary/20 bg-gradient-to-br from-card to-card/50 backdrop-blur">
+          {/* Contact Info */}
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="space-y-6"
+          >
+            {contactInfo.map((info, idx) => (
+              <motion.div
+                key={info.label}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.1 }}
+              >
+                <Card className="group relative overflow-hidden border-2 hover:border-primary/30 transition-all duration-300 bg-gradient-to-br from-card to-card/50 backdrop-blur hover:shadow-xl hover:shadow-primary/10">
+                  <div className={`absolute inset-0 bg-gradient-to-br ${info.gradient} opacity-0 group-hover:opacity-5 transition-opacity`} />
+                  
+                  <CardContent className="p-6 relative z-10">
+                    <div className="flex items-center gap-4">
+                      <motion.div
+                        className={`p-4 rounded-xl bg-gradient-to-br ${info.gradient} text-white shadow-lg`}
+                        whileHover={{ scale: 1.1, rotate: 5 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <info.icon className="h-6 w-6" />
+                      </motion.div>
+                      
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-muted-foreground mb-1">
+                          {info.label}
+                        </p>
+                        {info.href ? (
+                          <a
+                            href={info.href}
+                            className="font-semibold hover:text-primary transition-colors break-all"
+                          >
+                            {info.value}
+                          </a>
+                        ) : (
+                          <p className="font-semibold break-words">{info.value}</p>
+                        )}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+
+            {/* Additional info card */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4 }}
+            >
+              <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/10 to-accent/10">
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 rounded-xl bg-gradient-to-br from-primary to-accent text-white">
+                      <MessageSquare className="h-6 w-6" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-lg mb-2">Quick Response</h3>
+                      <p className="text-sm text-muted-foreground">
+                        I typically respond within 24 hours. Feel free to reach out
+                        anytime!
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </motion.div>
+
+          {/* Contact Form */}
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <Card className="border-2 hover:border-primary/30 transition-all bg-gradient-to-br from-card to-card/50 backdrop-blur shadow-xl">
               <CardHeader>
-                <CardTitle className="text-2xl">Contact Information</CardTitle>
-                <CardDescription className="text-base">Feel free to reach out through any of these channels</CardDescription>
+                <CardTitle className="text-2xl">Send a Message</CardTitle>
+                <CardDescription className="text-base">
+                  Fill out the form below and I'll get back to you as soon as possible
+                </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-5">
-                <div className="flex items-center gap-4 group p-3 rounded-lg hover:bg-primary/5 transition-colors">
-                  <div className="p-2 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 group-hover:scale-110 transition-transform">
-                    <Mail className="h-5 w-5 text-primary" />
+              <CardContent>
+                <form onSubmit={handleSubmit} className="space-y-5">
+                  <div>
+                    <Input
+                      placeholder="Your Name"
+                      value={formData.name}
+                      onChange={(e) =>
+                        setFormData({ ...formData, name: e.target.value })
+                      }
+                      maxLength={100}
+                      required
+                      className="h-12 focus:border-primary focus:ring-primary/20 transition-all"
+                    />
                   </div>
-                  <a
-                    href="mailto:prabhakartiwari0209@gmail.com"
-                    className="hover:text-primary transition-colors font-medium"
+                  
+                  <div>
+                    <Input
+                      type="email"
+                      placeholder="Your Email"
+                      value={formData.email}
+                      onChange={(e) =>
+                        setFormData({ ...formData, email: e.target.value })
+                      }
+                      maxLength={255}
+                      required
+                      className="h-12 focus:border-primary focus:ring-primary/20 transition-all"
+                    />
+                  </div>
+                  
+                  <div>
+                    <Textarea
+                      placeholder="Your Message (minimum 10 characters)"
+                      value={formData.message}
+                      onChange={(e) =>
+                        setFormData({ ...formData, message: e.target.value })
+                      }
+                      maxLength={1000}
+                      required
+                      rows={6}
+                      className="focus:border-primary focus:ring-primary/20 transition-all resize-none"
+                    />
+                    <p className="text-xs text-muted-foreground mt-2">
+                      {formData.message.length}/1000 characters
+                    </p>
+                  </div>
+                  
+                  <Button
+                    type="submit"
+                    className="w-full h-12 group relative overflow-hidden bg-gradient-to-r from-primary to-accent hover:shadow-lg hover:shadow-primary/50 transition-all"
+                    disabled={isSubmitting}
                   >
-                    prabhakartiwari0209@gmail.com
-                  </a>
-                </div>
-                <div className="flex items-center gap-4 group p-3 rounded-lg hover:bg-accent/5 transition-colors">
-                  <div className="p-2 rounded-lg bg-gradient-to-br from-accent/10 to-accent/5 group-hover:scale-110 transition-transform">
-                    <Phone className="h-5 w-5 text-accent" />
-                  </div>
-                  <a href="tel:7073150463" className="hover:text-accent transition-colors font-medium">
-                    7073150463
-                  </a>
-                </div>
-                <div className="flex items-center gap-4 p-3 rounded-lg">
-                  <div className="p-2 rounded-lg bg-gradient-to-br from-primary/10 to-accent/5">
-                    <MapPin className="h-5 w-5 text-primary" />
-                  </div>
-                  <span className="font-medium">Pratap Nagar, Jaipur, Rajasthan 302033</span>
-                </div>
+                    <span className="relative z-10 flex items-center justify-center gap-2">
+                      {isSubmitting ? (
+                        "Sending..."
+                      ) : (
+                        <>
+                          Send Message
+                          <Send className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                        </>
+                      )}
+                    </span>
+                  </Button>
+                </form>
               </CardContent>
             </Card>
-          </div>
-
-          <Card className="card-hover border-2 border-transparent hover:border-primary/20 bg-gradient-to-br from-card to-card/50 backdrop-blur opacity-0 animate-slide-in-right">
-            <CardHeader>
-              <CardTitle className="text-2xl">Send a Message</CardTitle>
-              <CardDescription className="text-base">I'll get back to you as soon as possible</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-5">
-                <div>
-                  <Input
-                    placeholder="Your Name"
-                    value={formData.name}
-                    onChange={(e) =>
-                      setFormData({ ...formData, name: e.target.value })
-                    }
-                    maxLength={100}
-                    required
-                    className="focus:border-primary focus:ring-primary/20 transition-all"
-                  />
-                </div>
-                <div>
-                  <Input
-                    type="email"
-                    placeholder="Your Email"
-                    value={formData.email}
-                    onChange={(e) =>
-                      setFormData({ ...formData, email: e.target.value })
-                    }
-                    maxLength={255}
-                    required
-                    className="focus:border-primary focus:ring-primary/20 transition-all"
-                  />
-                </div>
-                <div>
-                  <Textarea
-                    placeholder="Your Message (minimum 10 characters)"
-                    value={formData.message}
-                    onChange={(e) =>
-                      setFormData({ ...formData, message: e.target.value })
-                    }
-                    maxLength={1000}
-                    required
-                    rows={5}
-                    className="focus:border-primary focus:ring-primary/20 transition-all resize-none"
-                  />
-                  <p className="text-xs text-muted-foreground mt-2">
-                    {formData.message.length}/1000 characters
-                  </p>
-                </div>
-                <Button 
-                  type="submit" 
-                  className="w-full group relative overflow-hidden" 
-                  disabled={isSubmitting}
-                >
-                  <span className="relative z-10">
-                    {isSubmitting ? "Sending..." : "Send Message"}
-                  </span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-primary to-accent opacity-0 group-hover:opacity-100 transition-opacity" />
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
+          </motion.div>
         </div>
       </div>
     </section>
