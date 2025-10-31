@@ -11,6 +11,7 @@ interface Message {
   content: string;
 }
 
+
 const getOrCreateSessionId = () => {
   let sessionId = localStorage.getItem("chat_session_id");
   if (!sessionId) {
