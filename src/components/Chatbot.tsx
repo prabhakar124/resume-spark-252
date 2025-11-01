@@ -129,9 +129,9 @@ export const Chatbot = () => {
     }
 
     const userMessage: Message = { role: "user", content: input };
+    setInput("");
     setMessages((prev) => [...prev, userMessage]);
     await saveMessage(userMessage);
-    setInput("");
     setIsLoading(true);
     
     const newQuestionCount = questionCount + 1;
