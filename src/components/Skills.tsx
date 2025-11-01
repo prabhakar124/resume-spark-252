@@ -146,9 +146,9 @@ export const Skills = () => {
           className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6"
         >
           {[
-            { label: "Years Experience", value: "2+" },
-            { label: "Technologies", value: "15+" },
-            { label: "Projects", value: "10+" },
+            { label: "Years Experience", value: "2.5+" },
+            { label: "Technologies", value: "10+" },
+            { label: "Projects", value: "5+" },
             { label: "Code Quality", value: "A+" },
           ].map((stat, idx) => (
             <motion.div

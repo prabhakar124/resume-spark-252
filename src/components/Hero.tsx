@@ -1,6 +1,5 @@
-
 import { Button } from "@/components/ui/button";
-import { Github, Linkedin, Mail, Phone, Download, ArrowDown } from "lucide-react";
+import { Linkedin, Mail, Phone, Download, ArrowDown } from "lucide-react";
 import { motion } from "framer-motion";
 import img from "../../public/nano-banana-2025-10-31T18-11-54.png"
 
@@ -11,7 +10,7 @@ export const Hero = () => {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center px-4 py-20 overflow-hidden">
-      
+      {/* Animated background */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-accent/10" />
       <div className="absolute inset-0">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-pulse" />
@@ -161,44 +160,22 @@ export const Hero = () => {
               variant="outline"
               size="lg"
               asChild
-              className="hover:border-primary hover:text-primary transition-all"
+              className="hover:bg-primary hover:text-primary-foreground transition-all"
             >
               <a href="tel:7073150463">
                 <Phone className="mr-2 h-5 w-5" />
                 Call Me
               </a>
             </Button>
-          </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.9 }}
-            className="flex gap-4 pt-4"
-          >
             <Button
-              variant="ghost"
-              size="icon"
-              className="hover:bg-primary hover:text-primary-foreground transition-all hover:scale-110"
+              variant="outline"
+              size="lg"
               asChild
-            >
-              <a
-                href="https://github.com"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Github className="h-5 w-5" />
-              </a>
-            </Button>
-
-            <Button
-              variant="ghost"
-              size="icon"
               className="hover:bg-accent hover:text-accent-foreground transition-all hover:scale-110"
-              asChild
             >
               <a
-                href="https://linkedin.com"
+                href="https://linkedin.com/in/prabhakar-tiwari-619169249/"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -230,3 +207,6 @@ export const Hero = () => {
     </section>
   );
 };
+               
+          
+       
