@@ -11,7 +11,6 @@ interface Message {
   content: string;
 }
 
-
 const getOrCreateSessionId = () => {
   let sessionId = localStorage.getItem("chat_session_id");
   if (!sessionId) {
@@ -24,6 +23,7 @@ const getOrCreateSessionId = () => {
 export const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [sessionId] = useState(getOrCreateSessionId);
+  const [showTooltip, setShowTooltip] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
@@ -37,6 +37,33 @@ export const Chatbot = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const MAX_QUESTIONS = 15;
   const MAX_WORDS = 200;
+
+  // Check if user is new and show tooltip
+  useEffect(() => {
+    const hasSeenTooltip = localStorage.getItem("chatbot_tooltip_seen");
+    if (!hasSeenTooltip) {
+      // Show tooltip after a short delay
+      const showTimer = setTimeout(() => {
+        setShowTooltip(true);
+      }, 1000);
+
+      // Auto-hide after 5 seconds
+      const hideTimer = setTimeout(() => {
+        setShowTooltip(false);
+        localStorage.setItem("chatbot_tooltip_seen", "true");
+      }, 6000);
+
+      return () => {
+        clearTimeout(showTimer);
+        clearTimeout(hideTimer);
+      };
+    }
+  }, []);
+
+  const handleCloseTooltip = () => {
+    setShowTooltip(false);
+    localStorage.setItem("chatbot_tooltip_seen", "true");
+  };
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -61,7 +88,6 @@ export const Chatbot = () => {
           }));
           setMessages(loadedMessages);
           
-          // Count user questions
           const userQuestions = loadedMessages.filter((msg: Message) => msg.role === "user").length;
           setQuestionCount(userQuestions);
           
@@ -90,7 +116,6 @@ export const Chatbot = () => {
   const sendMessage = async () => {
     if (!input.trim() || isLoading || isChatLimitReached) return;
 
-    // Validate word count
     const wordCount = input.trim().split(/\s+/).length;
     if (wordCount > MAX_WORDS) {
       setMessages((prev) => [
@@ -131,7 +156,6 @@ export const Chatbot = () => {
       let textBuffer = "";
       let streamDone = false;
 
-      // Add empty assistant message that we'll update
       setMessages((prev) => [...prev, { role: "assistant", content: "" }]);
       let finalAssistantMessage = "";
 
@@ -177,12 +201,10 @@ export const Chatbot = () => {
         }
       }
 
-      // Save the complete assistant message
       if (finalAssistantMessage) {
         await saveMessage({ role: "assistant", content: finalAssistantMessage });
       }
 
-      // Check if question limit reached
       if (newQuestionCount >= MAX_QUESTIONS) {
         setIsChatLimitReached(true);
         const limitMessage = "For more information, you can directly contact Prabhakar Tiwari.";
@@ -206,19 +228,48 @@ export const Chatbot = () => {
   return (
     <>
       {!isOpen && (
-        <Button
-          onClick={() => setIsOpen(true)}
-          size="icon"
-          className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg z-50"
-        >
-          <MessageCircle className="h-6 w-6" />
-        </Button>
+        <>
+          {/* Tooltip for new users */}
+          {showTooltip && (
+            <div className="fixed bottom-20 right-4 md:bottom-24 md:right-6 w-[280px] md:w-[320px] z-50 animate-fade-in-up">
+              <div className="relative bg-gradient-to-br from-primary to-accent text-white rounded-lg shadow-2xl p-4">
+                {/* Close button */}
+                <button
+                  onClick={handleCloseTooltip}
+                  className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center rounded-full hover:bg-white/20 transition-colors"
+                  aria-label="Close tooltip"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+                
+                {/* Tooltip content */}
+                <div className="pr-6">
+                  <p className="text-sm leading-relaxed">
+                    If you are looking for something specific from this portfolio, ask here!
+                  </p>
+                </div>
+
+                {/* Arrow pointing to chatbot */}
+                <div className="absolute -bottom-2 right-8 w-4 h-4 bg-accent rotate-45"></div>
+              </div>
+            </div>
+          )}
+
+          {/* Chatbot button */}
+          <Button
+            onClick={() => setIsOpen(true)}
+            size="icon"
+            className="fixed bottom-4 right-4 md:bottom-6 md:right-6 h-12 w-12 md:h-14 md:w-14 rounded-full shadow-lg z-50"
+          >
+            <MessageCircle className="h-5 w-5 md:h-6 md:w-6" />
+          </Button>
+        </>
       )}
 
       {isOpen && (
-        <Card className="fixed bottom-6 right-6 w-[400px] h-[600px] shadow-2xl z-50 flex flex-col overflow-hidden">
+        <Card className="fixed bottom-4 right-4 md:bottom-6 md:right-6 w-[calc(100vw-2rem)] max-w-[400px] h-[calc(100vh-8rem)] max-h-[600px] shadow-2xl z-50 flex flex-col overflow-hidden">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 border-b">
-            <CardTitle className="text-lg">Ask About Prabhakar</CardTitle>
+            <CardTitle className="text-base md:text-lg">Ask About Prabhakar</CardTitle>
             <Button
               variant="ghost"
               size="icon"
@@ -229,8 +280,8 @@ export const Chatbot = () => {
             </Button>
           </CardHeader>
           <CardContent className="flex-1 flex flex-col p-0 overflow-hidden">
-            <div className="flex-1 overflow-y-auto px-4 py-4">
-              <div className="space-y-4">
+            <div className="flex-1 overflow-y-auto px-3 py-3 md:px-4 md:py-4">
+              <div className="space-y-3 md:space-y-4">
                 {messages.map((msg, idx) => (
                   <div
                     key={idx}
@@ -239,20 +290,20 @@ export const Chatbot = () => {
                     }`}
                   >
                      <div
-                      className={`max-w-[85%] rounded-lg px-4 py-2.5 ${
+                      className={`max-w-[85%] rounded-lg px-3 py-2 md:px-4 md:py-2.5 ${
                         msg.role === "user"
                           ? "bg-primary text-primary-foreground"
                           : "bg-muted text-foreground"
                       }`}
                     >
-                      <p className="text-sm leading-relaxed whitespace-pre-wrap break-words">
+                      <p className="text-xs md:text-sm leading-relaxed whitespace-pre-wrap break-words">
                         {msg.content}
                       </p>
                       {msg.role === "assistant" && 
                        msg.content.toLowerCase().includes("contact prabhakar") && (
                         <Button
                           size="sm"
-                          className="mt-2 w-full"
+                          className="mt-2 w-full text-xs"
                           onClick={() => window.location.href = "mailto:prabhakartiwari0209@gmail.com"}
                         >
                           Contact via Email
@@ -263,7 +314,7 @@ export const Chatbot = () => {
                 ))}
                 {isLoading && (
                   <div className="flex justify-start">
-                    <div className="bg-muted rounded-lg px-4 py-2.5">
+                    <div className="bg-muted rounded-lg px-3 py-2 md:px-4 md:py-2.5">
                       <div className="flex gap-1">
                         <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" />
                         <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce [animation-delay:0.1s]" />
@@ -275,9 +326,9 @@ export const Chatbot = () => {
                 <div ref={messagesEndRef} />
               </div>
             </div>
-            <div className="p-4 border-t bg-background">
+            <div className="p-3 md:p-4 border-t bg-background">
               {isChatLimitReached ? (
-                <div className="text-center text-sm text-muted-foreground py-2">
+                <div className="text-center text-xs md:text-sm text-muted-foreground py-2">
                   Chat limit reached. Please contact Prabhakar directly for more information.
                 </div>
               ) : (
@@ -297,7 +348,7 @@ export const Chatbot = () => {
                       onChange={(e) => setInput(e.target.value)}
                       placeholder="Ask a question..."
                       disabled={isLoading}
-                      className="flex-1"
+                      className="flex-1 text-sm"
                     />
                     <Button type="submit" size="icon" disabled={isLoading || !input.trim()}>
                       <Send className="h-4 w-4" />
