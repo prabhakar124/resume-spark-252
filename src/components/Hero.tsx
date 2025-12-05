@@ -118,7 +118,7 @@ export const Hero = () => {
           </Button>
 
           <Button variant="outline" size="lg" asChild>
-            <a href="/public/Prabhakar_Tiwari_Resume.pdf" download>
+            <a href="/public/Prabhakar_Tiwari_Resume.pdf" download="Prabhakar_Tiwari_CV.pdf">
               <Download className="mr-2 h-5 w-5" />
               Download CV
             </a>
