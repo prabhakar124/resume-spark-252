@@ -118,11 +118,17 @@ export const Hero = () => {
           </Button>
 
           <Button variant="outline" size="lg" asChild>
-            <a href="/public/Prabhakar_Tiwari_Resume.pdf" download="Prabhakar_Tiwari_CV.pdf">
+            <a
+              href="/Prabhakar_Tiwari_Resume.pdf"
+              download="Prabhakar_Tiwari_Resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <Download className="mr-2 h-5 w-5" />
               Download CV
             </a>
           </Button>
+
 
           <Button variant="outline" size="lg" asChild>
             <a href="tel:7073150463">
