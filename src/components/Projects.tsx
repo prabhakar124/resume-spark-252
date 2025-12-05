@@ -30,6 +30,19 @@ const projects = [
     icon: Sparkles,
     gradient: "from-purple-500 to-pink-500",
   },
+   {
+    title: "Amazon Associate Connector – Dropshipping App",
+    description:
+      "A Shopify dropshipping app that enables merchants to import Amazon products using URLs with seamless product publishing and analytics capabilities.",
+    highlights: [
+      "Debounced API-driven product fetching with preview before publishing",
+      "Filtering, sorting, and delete functionality for imported products",
+      "Multi-page setup: analytics dashboard, imported products, pricing & FAQs",
+    ],
+    technologies: ["React.js", "Redux", "Shopify Polaris", "REST APIs"],
+    icon: Code,
+    gradient: "from-amber-500 to-orange-500",
+  },
 ];
 
 export const Projects = () => {

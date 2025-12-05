@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Linkedin, Mail, Phone, Download, ArrowDown } from "lucide-react";
 import { motion } from "framer-motion";
-import img from "../../public/nano-banana-2025-10-31T18-11-54.png"
 
 export const Hero = () => {
   const scrollToSection = (id: string) => {
@@ -40,149 +39,107 @@ export const Hero = () => {
         ))}
       </div>
 
-      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center relative z-10">
-        {/* Left side - Profile Image */}
+      <div className="max-w-5xl mx-auto text-center space-y-6 relative z-10">
+        {/* Welcome Badge */}
         <motion.div
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8 }}
-          className="flex justify-center lg:justify-end order-2 lg:order-1"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
         >
-          <div className="relative group">
-            {/* Glowing ring */}
-            <div className="absolute inset-0 bg-gradient-to-r from-primary to-accent rounded-full blur-2xl opacity-50 group-hover:opacity-75 transition-opacity duration-500 animate-pulse" />
-            
-            {/* Profile image container */}
-            <div className="relative w-72 h-72 md:w-96 md:h-96 rounded-full overflow-hidden border-4 border-primary/20 shadow-2xl">
-              <img
-                src={img}
-                alt="Prabhakar Tiwari"
-                className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
-              />
-              {/* Overlay gradient */}
-              <div className="absolute inset-0 bg-gradient-to-t from-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            </div>
+          <span className="px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium">
+            👋 Welcome to my portfolio
+          </span>
+        </motion.div>
+
+        {/* Main Title */}
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="text-5xl md:text-7xl font-bold leading-tight"
+        >
+          I'm{" "}
+          <span className="gradient-text inline-block">
+            Prabhakar Tiwari
+          </span>
+        </motion.h1>
+
+        {/* Role & Tech Stack */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          className="space-y-3"
+        >
+          <p className="text-2xl md:text-3xl font-semibold text-foreground/80">
+            Full-Stack Developer
+          </p>
+
+          <div className="flex justify-center flex-wrap gap-2">
+            {["React.js", "Python", "FastAPI", "AWS"].map((tech) => (
+              <span
+                key={tech}
+                className="px-3 py-1 bg-accent/10 text-accent rounded-full text-sm font-medium"
+              >
+                {tech}
+              </span>
+            ))}
           </div>
         </motion.div>
 
-        {/* Right side - Content */}
-        <motion.div
-          initial={{ opacity: 0, x: 50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="space-y-6 order-1 lg:order-2"
+        {/* About Text */}
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7 }}
+          className="text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto"
         >
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="inline-block"
+          Building scalable web applications with 2.5+ years of experience.
+          Passionate about creating intuitive user experiences and writing
+          clean, maintainable code.
+        </motion.p>
+
+        {/* Buttons */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8 }}
+          className="flex justify-center flex-wrap gap-4 pt-4"
+        >
+          <Button
+            onClick={() => scrollToSection("contact")}
+            size="lg"
+            className="group relative overflow-hidden bg-gradient-to-r from-primary to-accent hover:shadow-lg hover:shadow-primary/50 transition-all"
           >
-            <span className="px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium">
-              👋 Welcome to my portfolio
+            <span className="relative z-10 flex items-center gap-2">
+              <Mail className="h-5 w-5" />
+              Let's Talk
             </span>
-          </motion.div>
+          </Button>
 
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-            className="text-5xl md:text-7xl font-bold leading-tight"
-          >
-            I'm{" "}
-            <span className="gradient-text inline-block">
-              Prabhakar Tiwari
-            </span>
-          </motion.h1>
+          <Button variant="outline" size="lg" asChild>
+            <a href="/public/Prabhakar_Tiwari_Resume.pdf" download>
+              <Download className="mr-2 h-5 w-5" />
+              Download CV
+            </a>
+          </Button>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-            className="space-y-2"
-          >
-            <p className="text-2xl md:text-3xl font-semibold text-foreground/80">
-              Full-Stack Developer
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {["React.js", "Python", "FastAPI", "AWS"].map((tech, i) => (
-                <span
-                  key={tech}
-                  className="px-3 py-1 bg-accent/10 text-accent rounded-full text-sm font-medium"
-                >
-                  {tech}
-                </span>
-              ))}
-            </div>
-          </motion.div>
+          <Button variant="outline" size="lg" asChild>
+            <a href="tel:7073150463">
+              <Phone className="mr-2 h-5 w-5" />
+              Call Me
+            </a>
+          </Button>
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7 }}
-            className="text-lg text-muted-foreground leading-relaxed max-w-xl"
-          >
-            Building scalable web applications with 2+ years of experience.
-            Passionate about creating intuitive user experiences and writing
-            clean, maintainable code.
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8 }}
-            className="flex flex-wrap gap-4 pt-4"
-          >
-            <Button
-              onClick={() => scrollToSection("contact")}
-              size="lg"
-              className="group relative overflow-hidden bg-gradient-to-r from-primary to-accent hover:shadow-lg hover:shadow-primary/50 transition-all"
+          <Button variant="outline" size="lg" asChild>
+            <a
+              href="https://linkedin.com/in/prabhakar-tiwari-619169249/"
+              target="_blank"
+              rel="noopener noreferrer"
             >
-              <span className="relative z-10 flex items-center gap-2">
-                <Mail className="h-5 w-5" />
-                Let's Talk
-              </span>
-            </Button>
-
-            <Button
-              variant="outline"
-              size="lg"
-              className="group hover:bg-primary hover:text-primary-foreground transition-all"
-              asChild
-            >
-              <a href="#" download>
-                <Download className="mr-2 h-5 w-5 group-hover:animate-bounce" />
-                Download CV
-              </a>
-            </Button>
-
-            <Button
-              variant="outline"
-              size="lg"
-              asChild
-              className="hover:bg-primary hover:text-primary-foreground transition-all"
-            >
-              <a href="tel:7073150463">
-                <Phone className="mr-2 h-5 w-5" />
-                Call Me
-              </a>
-            </Button>
-
-            <Button
-              variant="outline"
-              size="lg"
-              asChild
-              className="hover:bg-accent hover:text-accent-foreground transition-all hover:scale-110"
-            >
-              <a
-                href="https://linkedin.com/in/prabhakar-tiwari-619169249/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Linkedin className="h-5 w-5" />
-              </a>
-            </Button>
-          </motion.div>
+              <Linkedin className="h-5 w-5" />
+            </a>
+          </Button>
         </motion.div>
       </div>
 
@@ -207,6 +164,3 @@ export const Hero = () => {
     </section>
   );
 };
-               
-          
-       
