@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 const education = [
   {
     institution: "BMIT College Sitapura, Jaipur",
-    degree: "Bachelor's in Civil Engineering",
+    degree: "Bachelor of Technology",
     type: "degree",
     location: "Jaipur, Rajasthan",
     icon: GraduationCap,

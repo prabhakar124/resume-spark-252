@@ -1,19 +1,19 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
-import { Code2, Palette, Server, Database, Cloud, Wrench } from "lucide-react";
+import { Code2, Palette, Server, Database, Cloud, Brain } from "lucide-react";
 
 const skillCategories = [
   {
     title: "Languages",
     icon: Code2,
-    skills: ["JavaScript", "Python"],
+    skills: ["JavaScript", "TypeScript", "Python"],
     color: "from-blue-500 to-cyan-500",
   },
   {
     title: "Frontend",
     icon: Palette,
-    skills: ["HTML", "CSS", "React", "Redux", "Material-UI"],
+    skills: ["React.js", "Next.js", "Redux", "Material-UI", "HTML", "CSS"],
     color: "from-purple-500 to-pink-500",
   },
   {
@@ -23,22 +23,32 @@ const skillCategories = [
     color: "from-green-500 to-emerald-500",
   },
   {
+    title: "AI / GenAI",
+    icon: Brain,
+    skills: [
+      "LLMs",
+      "RAG",
+      "AI Agents",
+      "LangChain",
+      "LangGraph",
+      "Embeddings",
+      "Prompt Engineering",
+      "Hybrid Search",
+      "Re-ranking",
+    ],
+    color: "from-violet-500 to-fuchsia-500",
+  },
+  {
     title: "Databases",
     icon: Database,
-    skills: ["MySQL", "SQL"],
+    skills: ["MySQL", "Qdrant"],
     color: "from-orange-500 to-red-500",
   },
   {
-    title: "Cloud & DevOps",
+    title: "DevOps & Tools",
     icon: Cloud,
-    skills: ["AWS", "CI/CD Pipelines"],
+    skills: ["Git", "GitHub", "AWS", "CI/CD Pipelines", "Docker"],
     color: "from-indigo-500 to-blue-500",
-  },
-  {
-    title: "Tools",
-    icon: Wrench,
-    skills: ["Git", "GitHub"],
-    color: "from-yellow-500 to-orange-500",
   },
 ];
 
@@ -146,9 +156,9 @@ export const Skills = () => {
           className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6"
         >
           {[
-            { label: "Years Experience", value: "2.5+" },
-            { label: "Technologies", value: "10+" },
-            { label: "Projects", value: "5+" },
+            { label: "Years Experience", value: "4" },
+            { label: "Technologies", value: "20+" },
+            { label: "Projects", value: "3+" },
             { label: "Code Quality", value: "A+" },
           ].map((stat, idx) => (
             <motion.div

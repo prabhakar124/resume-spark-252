@@ -21,46 +21,62 @@ CONTACT:
 - Location: Pratap Nagar, Jaipur(Rajasthan), 302033
 
 SUMMARY:
-Full-stack developer with 2+ years of experience building scalable web applications using React.js, FastAPI, and MySQL. Skilled in RESTful APIs, real-time workflows, and intuitive UIs. Experienced with third-party API integrations (Shopify, eBay), and GenAI technologies (vector DBs, embeddings, RAG). Recognized for clean code, problem-solving, and delivering user-focused solutions.
+Generative AI Engineer with around 4 years of experience building scalable web applications using React.js, Next.js, Python, FastAPI, and MySQL. Experienced in Generative AI, LLMs, RAG, AI chatbots, embeddings, vector databases, and Agentic AI. Hands-on experience building AI-powered learning solutions, including Class Buddy, with context-aware chatbots and automated summaries for students, parents, and teachers. Skilled in RESTful APIs, third-party integrations, and delivering scalable, user-focused solutions.
 
 SKILLS:
 - Languages: JavaScript, Python
-- Frontend: HTML, CSS, React, Redux, Material-UI
+- Frontend: React.js, Next.js, TypeScript, Redux, Material-UI, HTML, CSS
 - Backend: FastAPI (RESTful APIs), API documentation (Swagger), Unit testing (Pytest), Load testing (Locust)
-- Databases: MySQL, SQL
-- Tools & Platforms: Git, GitHub, AWS, CI/CD Pipelines
+- Databases: MySQL, Qdrant
+- AI / GenAI: LLMs, Generative AI, RAG, AI Agents, Prompt Engineering, Embeddings, Hybrid Search, Re-ranking, LangChain, LangGraph
+- DevOps & Tools: Git, GitHub, AWS, CI/CD Pipelines, Docker
 
 PROFESSIONAL EXPERIENCE:
 
-1. Infoshor Software PVT LTD (February 2023 - August 2025) - Associate Software Developer
+1. TalentGum (February 2026 - Present) - Generative AI Engineer
+   - Working on a Next.js-based e-learning platform, integrating APIs to build dynamic UI and managing state using Redux
+   - Developing Class Buddy, an AI-powered learning companion with an AI chatbot and automated class summaries for students, parents, and teachers
+   - Building RAG pipelines using FastAPI, LLMs, embeddings, and Qdrant for context-aware chatbot responses and classroom knowledge retrieval
+   - Integrating AI backend APIs with Next.js, Redux, and reusable frontend components
+
+2. Activant Solutions PVT LTD (September 2025 - February 2026) - Web Application Developer
+   - Frontend development of an enterprise SaaS app for Shopify merchants using Next.js, React.js and Polaris
+   - Implemented background jobs and async workflows in Node.js
+   - Built a responsive, high-performance UI using Next.js, React.js and Shopify Polaris
+   - Developed analytics dashboards, points, and rewards modules
+   - Ensured scalable, reusable UI components and a seamless user experience
+
+3. Infoshor Software PVT LTD (February 2023 - August 2025) - Associate Software Developer
    - Developed and maintained web applications using React.js, Python and MySQL
    - Improved system performance and scalability through optimized database design and AWS deployment
    - Collaborated with cross-functional teams to deliver user-focused features and reduce delivery time
    - Ensured high code quality through best practices, code reviews, and Git
 
-2. Activant Solutions PVT LTD (August 2025 - Currently working) - Web Application Developer
-   - Built and deployed an AI chatbot to assist users with intelligent, context-aware responses
-   - Implemented background jobs and event-driven workflows using asynchronous processing
-   - Integrated AI-powered image generation features to enhance user experience
-
 PROJECTS:
 
-1. Shopify eBay Importer
+1. TalentGum – E-Learning Platform | Frontend & Class Buddy AI Module
+   - Developed and enhanced the Next.js-based e-learning platform, building dynamic, responsive UI and integrating REST APIs using Redux
+   - Built Class Buddy, an AI-powered learning companion featuring an AI chatbot and automated class summaries for students, parents, and teachers
+   - Developed RAG pipelines using Python, FastAPI, LLMs, embeddings, and Qdrant
+   - Built transcript processing workflows using Whisper/Deepgram, LLM-based filtering, enrichment, and semantic chunking
+   - Created reusable frontend components, modules, and helper functions
+
+2. FavLoyalty – Loyalty & Rewards Platform
+   - Built an enterprise SaaS app for Shopify merchants with loyalty points, referrals, and tiered rewards
+   - Designed a merchant-friendly UI using Next.js and Shopify Polaris
+   - Delivered analytics dashboards, points settings, redeem settings
+
+3. Shopify eBay Importer
    - Built an integration platform to sync and manage products across Shopify and eBay
    - Implemented real-time product fetching with AWS SQS & Lambda
    - Designed dashboard for sync status and analytics
    - Added AI-driven category suggestions & error resolution using embeddings, vector DB, and prompt-based agents
-   - Tech: React.js, FastAPI, Shopify/eBay APIs, AWS (SQS, Lambda), AI embeddings, vector DB
-
-2. FavLoyalty – Loyalty & Rewards Platform
-   - Built an enterprise SaaS app for Shopify merchants with loyalty points, referrals, and tiered rewards
-   - Developed responsive frontend with React.js
-   - Integrated with Polaris and delivered features like analytics dashboards, points settings, redeem settings
+   - Tech: React.js, Python, Shopify/eBay APIs, AWS (SQS, Lambda), AI embeddings, vector DB
 
 EDUCATION & CERTIFICATIONS:
 - MERN Stack Internship at GIP technologies pvt. ltd. (August 2022 - January 2023)
 - MERN Stack Certification & Training at Grras solutions pvt. ltd. (January 2022 - July 2022)
-- Bachelor's in Civil Engineering from BMIT college sitapura, Jaipur
+- Bachelor of Technology from BMIT college sitapura, Jaipur
 
 HANDLING UNCLEAR OR IRRELEVANT MESSAGES:
 

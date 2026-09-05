@@ -5,43 +5,59 @@ import { motion } from "framer-motion";
 
 const projects = [
   {
-    title: "Shopify eBay Importer",
+    title: "TalentGum – E-Learning Platform",
     description:
-      "Built an integration platform to sync and manage products across Shopify and eBay with real-time processing and AI-driven features.",
+      "Next.js e-learning platform with Class Buddy, an AI learning companion for students, parents, and teachers.",
     highlights: [
-      "Real-time product fetching with AWS SQS & Lambda",
-      "Dashboard for sync status and analytics",
-      "AI-driven category suggestions & error resolution using embeddings and vector DB",
+      "Dynamic, responsive UI with REST APIs and Redux",
+      "AI chatbot and automated class summaries via Class Buddy",
+      "RAG pipelines with FastAPI, LLMs, embeddings, and Qdrant",
+      "Transcript workflows with Whisper/Deepgram, LLM filtering, enrichment, and semantic chunking",
     ],
-    technologies: ["React.js", "FastAPI", "Shopify API", "eBay API", "AWS", "AI Embeddings"],
-    icon: Zap,
-    gradient: "from-blue-500 to-cyan-500",
+    technologies: [
+      "Next.js",
+      "Redux",
+      "Python",
+      "FastAPI",
+      "LLMs",
+      "Qdrant",
+      "Whisper/Deepgram",
+    ],
+    icon: Sparkles,
+    gradient: "from-violet-500 to-fuchsia-500",
   },
   {
     title: "FavLoyalty – Loyalty & Rewards Platform",
     description:
-      "Enterprise SaaS application for Shopify merchants featuring loyalty points, referrals, and tiered rewards system.",
+      "Enterprise SaaS app for Shopify merchants with loyalty points, referrals, and tiered rewards.",
     highlights: [
-      "Responsive frontend with React.js",
-      "Integration with Shopify Polaris design system",
-      "Analytics dashboards and configurable reward settings",
+      "Merchant-friendly UI using Next.js and Shopify Polaris",
+      "Analytics dashboards, points settings, and redeem settings",
+      "Improved usability and reduced onboarding time",
     ],
-    technologies: ["React.js", "Polaris", "FastAPI", "MySQL"],
-    icon: Sparkles,
+    technologies: ["Next.js", "React.js", "Shopify Polaris"],
+    icon: Zap,
     gradient: "from-purple-500 to-pink-500",
   },
-   {
-    title: "Amazon Associate Connector – Dropshipping App",
+  {
+    title: "Shopify eBay Importer",
     description:
-      "A Shopify dropshipping app that enables merchants to import Amazon products using URLs with seamless product publishing and analytics capabilities.",
+      "Integration platform to sync and manage products across Shopify and eBay with real-time processing and AI-driven features.",
     highlights: [
-      "Debounced API-driven product fetching with preview before publishing",
-      "Filtering, sorting, and delete functionality for imported products",
-      "Multi-page setup: analytics dashboard, imported products, pricing & FAQs",
+      "Real-time product fetching with AWS SQS & Lambda",
+      "Dashboard for sync status and analytics",
+      "AI-driven category suggestions and error resolution using embeddings, vector DB, and prompt-based agents",
     ],
-    technologies: ["React.js", "Redux", "Shopify Polaris", "REST APIs"],
+    technologies: [
+      "React.js",
+      "Python",
+      "Shopify/eBay APIs",
+      "AWS SQS & Lambda",
+      "Embeddings",
+      "Vector DB",
+    ],
     icon: Code,
-    gradient: "from-amber-500 to-orange-500",
+    gradient: "from-blue-500 to-cyan-500",
   },
 ];
 

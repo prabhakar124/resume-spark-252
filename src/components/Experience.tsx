@@ -4,14 +4,27 @@ import { motion } from "framer-motion";
 
 const experiences = [
   {
-    company: "Activant Solutions PVT LTD",
-    role: "Web Application Developer",
-    period: "August 2025 - Present",
+    company: "TalentGum",
+    role: "Generative AI Engineer",
+    period: "February 2026 - Present",
     current: true,
     achievements: [
-      "Built and deployed an AI chatbot to assist users with intelligent, context-aware responses",
-      "Implemented background jobs and event-driven workflows using asynchronous processing to handle notifications, data updates, and scheduled tasks efficiently",
-      "Integrated AI-powered image generation features to enhance user experience and automate media creation",
+      "Working on a Next.js-based e-learning platform, integrating APIs to build dynamic UI and managing state using Redux",
+      "Developing Class Buddy, an AI-powered learning companion with an AI chatbot and automated class summaries for students, parents, and teachers",
+      "Building RAG pipelines using FastAPI, LLMs, embeddings, and Qdrant for context-aware chatbot responses and classroom knowledge retrieval",
+      "Integrating AI backend APIs with Next.js, Redux, and reusable frontend components",
+    ],
+  },
+  {
+    company: "Activant Solutions PVT LTD",
+    role: "Web Application Developer",
+    period: "September 2025 - February 2026",
+    current: false,
+    achievements: [
+      "Frontend development of an enterprise SaaS app for Shopify merchants using Next.js, React.js and Polaris",
+      "Implemented background jobs and async workflows in Node.js",
+      "Built a responsive, high-performance UI and developed analytics dashboards, points, and rewards modules",
+      "Ensured scalable, reusable UI components and a seamless user experience",
     ],
   },
   {
@@ -80,29 +93,27 @@ export const Experience = () => {
                 </div>
 
                 {/* Card */}
-                <div className={`w-full md:w-[calc(50%-4rem)] ${idx % 2 === 0 ? "md:text-right" : "md:text-left"}`}>
+                <div className="w-full md:w-[calc(50%-4rem)]">
                   <Card className="group relative overflow-hidden border-2 hover:border-primary/30 transition-all duration-300 hover:shadow-2xl hover:shadow-primary/20 bg-gradient-to-br from-card to-card/50 backdrop-blur">
                     {/* Gradient overlay */}
                     <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-                    {/* Current badge */}
-                    {exp.current && (
-                      <div className="absolute top-4 right-4">
-                        <span className="px-3 py-1 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-full text-xs font-bold shadow-lg animate-pulse">
-                          Current
-                        </span>
-                      </div>
-                    )}
-
                     <CardHeader className="relative z-10">
-                      <div className={`flex items-start gap-4 ${idx % 2 === 0 ? "md:flex-row-reverse" : "md:flex-row"} flex-row`}>
-                        <div className="p-3 rounded-xl bg-gradient-to-br from-primary/10 to-accent/10 group-hover:scale-110 transition-transform duration-300">
+                      <div className="flex items-start gap-4">
+                        <div className="p-3 rounded-xl bg-gradient-to-br from-primary/10 to-accent/10 group-hover:scale-110 transition-transform duration-300 flex-shrink-0">
                           <Briefcase className="h-6 w-6 text-primary" />
                         </div>
-                        <div className="flex-1">
-                          <CardTitle className="text-2xl mb-2 group-hover:text-primary transition-colors">
-                            {exp.role}
-                          </CardTitle>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-3 flex-wrap mb-2">
+                            <CardTitle className="text-2xl group-hover:text-primary transition-colors">
+                              {exp.role}
+                            </CardTitle>
+                            {exp.current && (
+                              <span className="px-3 py-1 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-full text-xs font-bold shadow-lg">
+                                Current
+                              </span>
+                            )}
+                          </div>
                           <p className="text-lg font-semibold text-muted-foreground mb-2">
                             {exp.company}
                           </p>
@@ -152,9 +163,9 @@ export const Experience = () => {
           className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6"
         >
           {[
-            { label: "Total Experience", value: "2.5+ Years" },
-            { label: "Companies Worked", value: "2" },
-            { label: "Key Projects", value: "5+" },
+            { label: "Total Experience", value: "4 Years" },
+            { label: "Companies Worked", value: "3" },
+            { label: "Key Projects", value: "3+" },
           ].map((stat, idx) => (
             <motion.div
               key={stat.label}

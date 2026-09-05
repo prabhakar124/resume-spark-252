@@ -72,11 +72,11 @@ export const Hero = () => {
           className="space-y-3"
         >
           <p className="text-2xl md:text-3xl font-semibold text-foreground/80">
-            Full-Stack Developer
+            Generative AI Engineer
           </p>
 
           <div className="flex justify-center flex-wrap gap-2">
-            {["React.js", "Python", "FastAPI", "AWS"].map((tech) => (
+            {["Next.js", "React.js", "Python", "FastAPI", "RAG"].map((tech) => (
               <span
                 key={tech}
                 className="px-3 py-1 bg-accent/10 text-accent rounded-full text-sm font-medium"
@@ -94,9 +94,9 @@ export const Hero = () => {
           transition={{ delay: 0.7 }}
           className="text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto"
         >
-          Building scalable web applications with 2.5+ years of experience.
-          Passionate about creating intuitive user experiences and writing
-          clean, maintainable code.
+          Building AI-powered products and scalable web apps with around 4 years
+          of experience. Hands-on with LLMs, RAG, and agentic workflows, plus
+          clean, maintainable full-stack code.
         </motion.p>
 
         {/* Buttons */}
