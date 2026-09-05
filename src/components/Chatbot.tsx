@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MessageCircle, X, Send } from "lucide-react";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import ReactMarkdown from "react-markdown";
 import { supabase } from "@/integrations/supabase/client";
 
 interface Message {
@@ -232,16 +232,16 @@ export const Chatbot = () => {
           {/* Tooltip for new users */}
           {showTooltip && (
             <div className="fixed bottom-20 right-4 md:bottom-24 md:right-6 w-[280px] md:w-[320px] z-50 animate-fade-in-up">
-              <div className="relative bg-gradient-to-br from-primary to-accent text-white rounded-lg shadow-2xl p-4">
+              <div className="relative bg-gradient-to-br from-primary to-accent text-primary-foreground rounded-2xl shadow-[0_10px_40px_-10px_hsl(var(--primary)/0.5)] p-4">
                 {/* Close button */}
                 <button
                   onClick={handleCloseTooltip}
-                  className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center rounded-full hover:bg-white/20 transition-colors"
+                  className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center rounded-full hover:bg-primary-foreground/20 transition-colors"
                   aria-label="Close tooltip"
                 >
                   <X className="h-4 w-4" />
                 </button>
-                
+
                 {/* Tooltip content */}
                 <div className="pr-6">
                   <p className="text-sm leading-relaxed">
@@ -256,25 +256,41 @@ export const Chatbot = () => {
           )}
 
           {/* Chatbot button */}
-          <Button
+          <button
             onClick={() => setIsOpen(true)}
-            size="icon"
-            className="fixed bottom-4 right-4 md:bottom-6 md:right-6 h-12 w-12 md:h-14 md:w-14 rounded-full shadow-lg z-50"
+            aria-label="Open chat"
+            className="group fixed bottom-4 right-4 md:bottom-6 md:right-6 h-12 w-12 md:h-14 md:w-14 rounded-full z-50 flex items-center justify-center bg-gradient-to-br from-primary to-accent text-primary-foreground shadow-[0_8px_30px_-6px_hsl(var(--primary)/0.6)] transition-all duration-300 hover:scale-110 hover:shadow-[0_12px_40px_-6px_hsl(var(--accent)/0.7)] active:scale-95"
           >
-            <MessageCircle className="h-5 w-5 md:h-6 md:w-6" />
-          </Button>
+            {/* Pulse ring */}
+            <span className="absolute inset-0 rounded-full bg-gradient-to-br from-primary to-accent opacity-40 animate-ping [animation-duration:2.5s]" />
+            <MessageCircle className="relative h-5 w-5 md:h-6 md:w-6 transition-transform duration-300 group-hover:-rotate-12" />
+          </button>
         </>
       )}
 
       {isOpen && (
-        <Card className="fixed bottom-4 right-4 md:bottom-6 md:right-6 w-[calc(100vw-2rem)] max-w-[400px] h-[calc(100vh-8rem)] max-h-[600px] shadow-2xl z-50 flex flex-col overflow-hidden">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 border-b">
-            <CardTitle className="text-base md:text-lg">Ask About Prabhakar</CardTitle>
+        <Card className="fixed bottom-4 right-4 md:bottom-6 md:right-6 w-[calc(100vw-2rem)] max-w-[400px] h-[calc(100vh-8rem)] max-h-[600px] z-50 flex flex-col overflow-hidden rounded-2xl border-border/50 bg-card/95 backdrop-blur-xl shadow-[0_20px_60px_-15px_hsl(var(--primary)/0.4)] animate-scale-in">
+          {/* Gradient top accent bar */}
+          <div className="h-1 w-full bg-gradient-to-r from-primary via-accent to-primary bg-[length:200%_100%] animate-[gradient-shift_3s_ease_infinite]" />
+
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3 border-b border-border/50">
+            <div className="flex items-center gap-2.5">
+              <div className="h-9 w-9 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-md">
+                <MessageCircle className="h-[18px] w-[18px] text-primary-foreground" />
+              </div>
+              <div>
+                <CardTitle className="text-base md:text-lg gradient-text">Ask About Prabhakar</CardTitle>
+                <p className="text-[10px] text-muted-foreground flex items-center gap-1">
+                  <span className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
+                  AI Assistant • Online
+                </p>
+              </div>
+            </div>
             <Button
               variant="ghost"
               size="icon"
               onClick={() => setIsOpen(false)}
-              className="h-8 w-8"
+              className="h-8 w-8 rounded-full hover:bg-muted"
             >
               <X className="h-4 w-4" />
             </Button>
@@ -285,25 +301,31 @@ export const Chatbot = () => {
                 {messages.map((msg, idx) => (
                   <div
                     key={idx}
-                    className={`flex ${
+                    className={`flex animate-message-in ${
                       msg.role === "user" ? "justify-end" : "justify-start"
                     }`}
                   >
                      <div
-                      className={`max-w-[85%] rounded-lg px-3 py-2 md:px-4 md:py-2.5 ${
+                      className={`max-w-[85%] px-3 py-2 md:px-4 md:py-2.5 shadow-sm ${
                         msg.role === "user"
-                          ? "bg-primary text-primary-foreground"
-                          : "bg-muted text-foreground"
+                          ? "bg-gradient-to-br from-primary to-accent text-primary-foreground rounded-2xl rounded-br-md"
+                          : "bg-muted/80 text-foreground rounded-2xl rounded-bl-md border border-border/40"
                       }`}
                     >
-                      <p className="text-xs md:text-sm leading-relaxed whitespace-pre-wrap break-words">
-                        {msg.content}
-                      </p>
-                      {msg.role === "assistant" && 
+                      {msg.role === "user" ? (
+                        <p className="text-xs md:text-sm leading-relaxed whitespace-pre-wrap break-words">
+                          {msg.content}
+                        </p>
+                      ) : (
+                        <div className="text-xs md:text-sm leading-relaxed break-words [&_strong]:font-semibold [&_ul]:list-disc [&_ul]:pl-4 [&_ul]:my-1 [&_ol]:list-decimal [&_ol]:pl-4 [&_ol]:my-1 [&_p]:my-1 [&_li]:my-0.5">
+                          <ReactMarkdown>{msg.content}</ReactMarkdown>
+                        </div>
+                      )}
+                      {msg.role === "assistant" &&
                        msg.content.toLowerCase().includes("contact prabhakar") && (
                         <Button
                           size="sm"
-                          className="mt-2 w-full text-xs"
+                          className="mt-2 w-full text-xs bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-opacity"
                           onClick={() => window.location.href = "mailto:prabhakartiwari0209@gmail.com"}
                         >
                           Contact via Email
@@ -313,12 +335,12 @@ export const Chatbot = () => {
                   </div>
                 ))}
                 {isLoading && (
-                  <div className="flex justify-start">
-                    <div className="bg-muted rounded-lg px-3 py-2 md:px-4 md:py-2.5">
+                  <div className="flex justify-start animate-message-in">
+                    <div className="bg-muted/80 border border-border/40 rounded-2xl rounded-bl-md px-3 py-2 md:px-4 md:py-2.5">
                       <div className="flex gap-1">
-                        <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" />
-                        <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce [animation-delay:0.1s]" />
-                        <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce [animation-delay:0.2s]" />
+                        <div className="w-2 h-2 rounded-full bg-gradient-to-br from-primary to-accent animate-bounce" />
+                        <div className="w-2 h-2 rounded-full bg-gradient-to-br from-primary to-accent animate-bounce [animation-delay:0.1s]" />
+                        <div className="w-2 h-2 rounded-full bg-gradient-to-br from-primary to-accent animate-bounce [animation-delay:0.2s]" />
                       </div>
                     </div>
                   </div>
@@ -326,7 +348,7 @@ export const Chatbot = () => {
                 <div ref={messagesEndRef} />
               </div>
             </div>
-            <div className="p-3 md:p-4 border-t bg-background">
+            <div className="p-3 md:p-4 border-t border-border/50 bg-background/60 backdrop-blur-sm">
               {isChatLimitReached ? (
                 <div className="text-center text-xs md:text-sm text-muted-foreground py-2">
                   Chat limit reached. Please contact Prabhakar directly for more information.
@@ -348,9 +370,14 @@ export const Chatbot = () => {
                       onChange={(e) => setInput(e.target.value)}
                       placeholder="Ask a question..."
                       disabled={isLoading}
-                      className="flex-1 text-sm"
+                      className="flex-1 text-sm rounded-xl border-border/60 focus-visible:ring-primary"
                     />
-                    <Button type="submit" size="icon" disabled={isLoading || !input.trim()}>
+                    <Button
+                      type="submit"
+                      size="icon"
+                      disabled={isLoading || !input.trim()}
+                      className="rounded-xl bg-gradient-to-br from-primary to-accent hover:opacity-90 hover:scale-105 transition-all disabled:opacity-50"
+                    >
                       <Send className="h-4 w-4" />
                     </Button>
                   </form>
