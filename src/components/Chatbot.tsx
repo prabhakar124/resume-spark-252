@@ -276,7 +276,7 @@ export const Chatbot = () => {
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3 border-b border-border/50">
             <div className="flex items-center gap-2.5">
               <div className="h-9 w-9 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-md">
-                <MessageCircle className="h-4.5 w-4.5 h-[18px] w-[18px] text-primary-foreground" />
+                <MessageCircle className="h-[18px] w-[18px] text-primary-foreground" />
               </div>
               <div>
                 <CardTitle className="text-base md:text-lg gradient-text">Ask About Prabhakar</CardTitle>
