@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MessageCircle, X, Send } from "lucide-react";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import ReactMarkdown from "react-markdown";
 import { supabase } from "@/integrations/supabase/client";
 
 interface Message {
@@ -312,9 +312,15 @@ export const Chatbot = () => {
                           : "bg-muted/80 text-foreground rounded-2xl rounded-bl-md border border-border/40"
                       }`}
                     >
-                      <p className="text-xs md:text-sm leading-relaxed whitespace-pre-wrap break-words">
-                        {msg.content}
-                      </p>
+                      {msg.role === "user" ? (
+                        <p className="text-xs md:text-sm leading-relaxed whitespace-pre-wrap break-words">
+                          {msg.content}
+                        </p>
+                      ) : (
+                        <div className="text-xs md:text-sm leading-relaxed break-words [&_strong]:font-semibold [&_ul]:list-disc [&_ul]:pl-4 [&_ul]:my-1 [&_ol]:list-decimal [&_ol]:pl-4 [&_ol]:my-1 [&_p]:my-1 [&_li]:my-0.5">
+                          <ReactMarkdown>{msg.content}</ReactMarkdown>
+                        </div>
+                      )}
                       {msg.role === "assistant" &&
                        msg.content.toLowerCase().includes("contact prabhakar") && (
                         <Button
