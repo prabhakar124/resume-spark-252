@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { Moon, Sun, ArrowDownToLine } from "lucide-react";
 
 const links = [
@@ -9,7 +10,8 @@ const links = [
   { id: "contact", label: "Contact" },
 ];
 
-export const Navbar = () => {
+/** `minimal` is used on sub-pages: section links are replaced by a link home. */
+export const Navbar = ({ minimal = false }: { minimal?: boolean }) => {
   const [scrolled, setScrolled] = useState(false);
   const [dark, setDark] = useState(false);
   const [active, setActive] = useState<string>("");
@@ -66,6 +68,14 @@ export const Navbar = () => {
           </span>
         </a>
 
+        {minimal ? (
+          <Link
+            to="/"
+            className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+          >
+            ← Portfolio
+          </Link>
+        ) : (
         <ul className="hidden items-center gap-1 md:flex">
           {links.map((l) => (
             <li key={l.id}>
@@ -83,6 +93,7 @@ export const Navbar = () => {
             </li>
           ))}
         </ul>
+        )}
 
         <div className="flex items-center gap-2">
           <button

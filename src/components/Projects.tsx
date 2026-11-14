@@ -1,6 +1,17 @@
+import { Link } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 import { Reveal, SectionHeader } from "@/components/Section";
 
-const projects = [
+type CaseStudyLink = { href: string; label: string; badge: string };
+
+const projects: {
+  title: string;
+  kicker: string;
+  description: string;
+  highlights: string[];
+  technologies: string[];
+  caseStudy?: CaseStudyLink;
+}[] = [
   {
     title: "TalentGum – E-Learning Platform",
     kicker: "AI · EdTech",
@@ -22,6 +33,11 @@ const projects = [
       "Qdrant",
       "Whisper/Deepgram",
     ],
+    caseStudy: {
+      href: "/projects/class-buddy",
+      label: "Read the Class Buddy case study",
+      badge: "🏆 1st Prize · AI Innovation Challenge 2026",
+    },
   },
   {
     title: "FavLoyalty – Loyalty & Rewards Platform",
@@ -83,7 +99,14 @@ export const Projects = () => {
                 </span>
 
                 <div className="relative md:col-span-7">
-                  <p className="eyebrow mb-4 text-primary">{p.kicker}</p>
+                  <div className="mb-4 flex flex-wrap items-center gap-x-4 gap-y-2">
+                    <p className="eyebrow text-primary">{p.kicker}</p>
+                    {p.caseStudy && (
+                      <span className="font-mono text-[11px] text-muted-foreground">
+                        {p.caseStudy.badge}
+                      </span>
+                    )}
+                  </div>
                   <h3 className="font-serif text-3xl leading-tight tracking-tight md:text-4xl">
                     {p.title}
                   </h3>
@@ -96,6 +119,15 @@ export const Projects = () => {
                       </li>
                     ))}
                   </ul>
+                  {p.caseStudy && (
+                    <Link
+                      to={p.caseStudy.href}
+                      className="group/link mt-8 inline-flex h-11 items-center gap-2 rounded-sm bg-primary px-5 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5"
+                    >
+                      {p.caseStudy.label}
+                      <ArrowRight className="h-4 w-4 transition-transform group-hover/link:translate-x-0.5" />
+                    </Link>
+                  )}
                 </div>
 
                 <div className="relative md:col-span-5 md:flex md:flex-col md:justify-end">
