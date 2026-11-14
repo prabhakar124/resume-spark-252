@@ -76,7 +76,7 @@ PROJECTS:
 EDUCATION & CERTIFICATIONS:
 - MERN Stack Internship at GIP technologies pvt. ltd. (August 2022 - January 2023)
 - MERN Stack Certification & Training at Grras solutions pvt. ltd. (January 2022 - July 2022)
-- Bachelor of Technology from BMIT college sitapura, Jaipur
+- Bachelor's in Civil Engineering from BMIT College Sitapura, Jaipur
 
 HANDLING UNCLEAR OR IRRELEVANT MESSAGES:
 

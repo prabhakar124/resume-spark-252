@@ -13,6 +13,7 @@ const projects = [
       "AI chatbot and automated class summaries via Class Buddy",
       "RAG pipelines with FastAPI, LLMs, embeddings, and Qdrant",
       "Transcript workflows with Whisper/Deepgram, LLM filtering, enrichment, and semantic chunking",
+      "Reusable frontend components, modules, and helper functions for scalability",
     ],
     technologies: [
       "Next.js",
