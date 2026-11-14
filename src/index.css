@@ -87,6 +87,68 @@
   }
 }
 
+/*
+ * Per-item accent themes. Wrapping an element in one of these re-points
+ * --primary, so every primary-based class inside picks up that colour.
+ * Orange (default) · teal · violet.
+ */
+.accent-teal {
+  --primary: 174 72% 30%;
+  --primary-foreground: 40 40% 99%;
+  --ring: 174 72% 30%;
+}
+.dark .accent-teal {
+  --primary: 170 55% 50%;
+  --primary-foreground: 24 10% 6%;
+  --ring: 170 55% 50%;
+}
+.accent-violet {
+  --primary: 258 55% 52%;
+  --primary-foreground: 40 40% 99%;
+  --ring: 258 55% 52%;
+}
+.dark .accent-violet {
+  --primary: 258 85% 74%;
+  --primary-foreground: 24 10% 6%;
+  --ring: 258 85% 74%;
+}
+
+/*
+ * Class Buddy module accents — muted, desaturated tones that are distinct
+ * from the vivid company colours above, so modules don't read as
+ * belonging to other companies. Steel blue · sage · brass.
+ */
+.accent-steel {
+  --primary: 213 40% 38%;
+  --primary-foreground: 40 40% 99%;
+  --ring: 213 40% 38%;
+}
+.dark .accent-steel {
+  --primary: 212 36% 68%;
+  --primary-foreground: 24 10% 6%;
+  --ring: 212 36% 68%;
+}
+.accent-sage {
+  --primary: 150 22% 34%;
+  --primary-foreground: 40 40% 99%;
+  --ring: 150 22% 34%;
+}
+.dark .accent-sage {
+  --primary: 148 20% 62%;
+  --primary-foreground: 24 10% 6%;
+  --ring: 148 20% 62%;
+}
+.accent-brass {
+  --primary: 38 50% 36%;
+  --primary-foreground: 40 40% 99%;
+  --ring: 38 50% 36%;
+}
+.dark .accent-brass {
+  --primary: 40 44% 62%;
+  --primary-foreground: 24 10% 6%;
+  --ring: 40 44% 62%;
+}
+
 @layer base {
   * {
     @apply border-border;
@@ -152,6 +214,10 @@
   .animate-blink {
     animation: blink 1.1s steps(1) infinite;
   }
+
+  .animate-wave {
+    animation: wave 1.4s ease-in-out infinite;
+  }
 }
 
 @keyframes fade-in-up {
@@ -173,6 +239,16 @@
   to {
     opacity: 1;
     transform: scale(1);
+  }
+}
+
+@keyframes wave {
+  0%,
+  100% {
+    transform: scaleY(0.3);
+  }
+  50% {
+    transform: scaleY(1);
   }
 }
 

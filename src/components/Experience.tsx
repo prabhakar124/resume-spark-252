@@ -1,23 +1,54 @@
 import { Reveal, SectionHeader } from "@/components/Section";
+import { CaseStudyButton } from "@/components/CaseStudyButton";
 
-const experiences = [
+type Job = {
+  company: string;
+  monogram: string;
+  accent: "" | "accent-teal" | "accent-violet";
+  role: string;
+  startYear: string;
+  period: string;
+  current: boolean;
+  summary: string;
+  stack: string[];
+  achievements: string[];
+  caseStudy?: { href: string; title: string; note?: string };
+};
+
+const experiences: Job[] = [
   {
     company: "TalentGum",
+    monogram: "TG",
+    accent: "",
     role: "Generative AI Engineer",
+    startYear: "2026",
     period: "February 2026 - Present",
     current: true,
+    summary: "Building Class Buddy, my award-winning AI learning companion, into production.",
+    stack: ["Next.js", "Redux", "FastAPI", "LLMs", "Redis", "WebSockets", "RAG", "Qdrant"],
     achievements: [
-      "Working on a Next.js-based e-learning platform, integrating APIs to build dynamic UI and managing state using Redux",
-      "Developing Class Buddy, an AI-powered learning companion with an AI chatbot and automated class summaries for students, parents, and teachers",
-      "Building RAG pipelines using FastAPI, LLMs, embeddings, and Qdrant for context-aware chatbot responses and classroom knowledge retrieval",
-      "Integrating AI backend APIs with Next.js, Redux, and reusable frontend components",
+      "Won 1st prize in the TalentGum AI Innovation Challenge 2026 with Class Buddy, which the company then adopted for production",
+      "Shipped AI class summaries and monthly parent reports, made reliable with Redis queueing, output guardrails, and GLM → OpenAI failover",
+      "Shipped a real-time public speaking evaluator: WebSocket audio streaming with gpt-realtime-whisper for instant feedback",
+      "Building the Class Buddy chatbot: a RAG pipeline with FastAPI, embeddings, Qdrant, hybrid search, and re-ranking",
+      "Developing the Next.js e-learning platform with Redux and reusable components, integrating the AI backend APIs",
     ],
+    caseStudy: {
+      href: "/projects/class-buddy",
+      title: "Class Buddy: from competition win to production AI",
+      note: "1st Prize, TalentGum AI Innovation Challenge 2026",
+    },
   },
   {
     company: "Activant Solutions PVT LTD",
+    monogram: "AS",
+    accent: "accent-teal",
     role: "Web Application Developer",
+    startYear: "2025",
     period: "September 2025 - February 2026",
     current: false,
+    summary: "Frontend for an enterprise Shopify loyalty & rewards SaaS.",
+    stack: ["Next.js", "React.js", "Shopify Polaris", "Node.js"],
     achievements: [
       "Frontend development of an enterprise SaaS app for Shopify merchants using Next.js, React.js and Polaris",
       "Implemented background jobs and async workflows in Node.js",
@@ -27,9 +58,14 @@ const experiences = [
   },
   {
     company: "Infoshor Software PVT LTD",
+    monogram: "IS",
+    accent: "accent-violet",
     role: "Associate Software Developer",
+    startYear: "2023",
     period: "February 2023 - August 2025",
     current: false,
+    summary: "Full-stack web applications with React, Python and MySQL on AWS.",
+    stack: ["React.js", "Python", "MySQL", "AWS"],
     achievements: [
       "Developed and maintained web applications using React.js, Python and MySQL",
       "Improved system performance and scalability through optimized database design and AWS deployment",
@@ -55,36 +91,103 @@ export const Experience = () => {
         />
 
         <ol>
-          {experiences.map((exp, i) => (
-            <Reveal key={exp.company} delay={i * 0.05}>
-              <li className="group grid gap-6 border-t border-border py-10 md:grid-cols-12 md:gap-8">
-                <div className="md:col-span-3">
-                  <p className="font-mono text-xs text-muted-foreground">{exp.period}</p>
-                  {exp.current && (
-                    <span className="mt-3 inline-flex items-center gap-1.5 rounded-sm bg-primary/10 px-2 py-0.5 font-mono text-[11px] uppercase tracking-wider text-primary">
-                      <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-                      Now
-                    </span>
+          {experiences.map((job, i) => (
+            <li
+              key={job.company}
+              className={`${job.accent} relative grid gap-4 md:grid-cols-[170px_1fr] md:gap-10`}
+            >
+              {/* Year column */}
+              <Reveal className="md:pt-7 md:text-right">
+                <p className="font-serif text-5xl leading-none tracking-tight text-primary md:text-6xl">
+                  {job.startYear}
+                </p>
+                <p className="mt-2 font-mono text-[11px] text-muted-foreground">{job.period}</p>
+              </Reveal>
+
+              {/* Timeline rail + card */}
+              <div
+                className={`relative border-l-2 pl-6 md:pl-10 ${
+                  i === experiences.length - 1 ? "border-transparent" : "border-border"
+                } pb-12 md:pb-16`}
+              >
+                <span
+                  aria-hidden
+                  className={`absolute -left-[9px] top-8 flex h-4 w-4 items-center justify-center rounded-full border-2 border-primary ${
+                    job.current ? "bg-primary" : "bg-background"
+                  }`}
+                >
+                  {job.current && (
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-50" />
                   )}
-                </div>
+                </span>
 
-                <div className="md:col-span-4">
-                  <h3 className="font-serif text-3xl leading-tight tracking-tight transition-colors group-hover:text-primary">
-                    {exp.company}
-                  </h3>
-                  <p className="mt-1 text-sm font-medium text-muted-foreground">{exp.role}</p>
-                </div>
+                <Reveal delay={0.05}>
+                  <article
+                    className={`relative overflow-hidden rounded-md border bg-card transition-colors ${
+                      job.current
+                        ? "border-primary/50 shadow-[0_24px_50px_-30px_hsl(var(--primary)/0.6)]"
+                        : "border-border hover:border-foreground/25"
+                    }`}
+                  >
+                    {/* Coloured top band */}
+                    <div className="h-1.5 w-full bg-primary" />
 
-                <ul className="space-y-3 md:col-span-5">
-                  {exp.achievements.map((a) => (
-                    <li key={a} className="flex gap-3 text-[15px] leading-relaxed text-muted-foreground">
-                      <span className="mt-[9px] h-px w-3 shrink-0 bg-primary" />
-                      <span>{a}</span>
-                    </li>
-                  ))}
-                </ul>
-              </li>
-            </Reveal>
+                    <div className="p-6 md:p-8">
+                      <header className="flex flex-wrap items-start gap-4">
+                        <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-md bg-primary font-serif text-2xl italic text-primary-foreground">
+                          {job.monogram}
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                            <h3 className="font-serif text-3xl leading-tight tracking-tight md:text-4xl">
+                              {job.company}
+                            </h3>
+                            {job.current && (
+                              <span className="rounded-sm bg-primary px-2 py-0.5 font-mono text-[11px] uppercase tracking-wider text-primary-foreground">
+                                Current
+                              </span>
+                            )}
+                          </div>
+                          <p className="mt-1 font-medium text-primary">{job.role}</p>
+                        </div>
+                      </header>
+
+                      <p className="mt-5 border-l-2 border-primary pl-4 text-lg leading-snug">
+                        {job.summary}
+                      </p>
+
+                      <div className="mt-5 flex flex-wrap gap-1.5">
+                        {job.stack.map((s) => (
+                          <span
+                            key={s}
+                            className="rounded-sm border border-primary/25 bg-primary/5 px-2 py-0.5 font-mono text-[11px] text-foreground/80"
+                          >
+                            {s}
+                          </span>
+                        ))}
+                      </div>
+
+                      <ul className="mt-6 grid gap-x-8 gap-y-3 border-t border-border pt-6 lg:grid-cols-2">
+                        {job.achievements.map((a) => (
+                          <li key={a} className="flex gap-3 text-[14.5px] leading-relaxed text-muted-foreground">
+                            <span className="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                            <span>{a}</span>
+                          </li>
+                        ))}
+                      </ul>
+
+                      {job.caseStudy && (
+                        <CaseStudyButton
+                          to={job.caseStudy.href}
+                          title={job.caseStudy.title}
+                          note={job.caseStudy.note}
+                        />
+                      )}
+                    </div>
+                  </article>
+                </Reveal>
+              </div>
+            </li>
           ))}
         </ol>
       </div>
