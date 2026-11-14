@@ -5,6 +5,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// Keep this portfolio knowledge aligned with the current resume; the chatbot uses it as its source of facts.
 const RESUME_CONTEXT = `
 You are an AI assistant representing Prabhakar Tiwari's professional portfolio. Your role is to ANSWER questions from users, not to ask questions yourself.
 
