@@ -1,172 +1,151 @@
-import { Button } from "@/components/ui/button";
-import { Linkedin, Mail, Phone, Download, ArrowDown } from "lucide-react";
 import { motion } from "framer-motion";
+import { ArrowUpRight, Linkedin, Mail, Phone, Sparkles } from "lucide-react";
+import { HeroBackground } from "@/components/HeroBackground";
+
+export const openChatbot = () => window.dispatchEvent(new Event("open-chatbot"));
+
+const fade = (delay: number) => ({
+  initial: { opacity: 0, y: 18 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] },
+});
+
+const stats = [
+  { value: "~4 yrs", label: "Shipping web & AI products" },
+  { value: "RAG · Agents", label: "LLM systems in production" },
+  { value: "Next.js · FastAPI", label: "Full-stack, end to end" },
+];
+
+const TerminalCard = () => (
+  <div className="relative overflow-hidden rounded-md border border-border bg-card shadow-[0_30px_60px_-30px_hsl(var(--foreground)/0.25)]">
+    <div className="flex items-center justify-between border-b border-border px-4 py-2.5">
+      <div className="flex gap-1.5">
+        <span className="h-2.5 w-2.5 rounded-full bg-border" />
+        <span className="h-2.5 w-2.5 rounded-full bg-border" />
+        <span className="h-2.5 w-2.5 rounded-full bg-primary" />
+      </div>
+      <span className="font-mono text-[11px] text-muted-foreground">rag-pipeline.py</span>
+    </div>
+    <div className="space-y-3 p-5 font-mono text-[12.5px] leading-relaxed">
+      <p>
+        <span className="text-primary">❯</span> query
+        <span className="text-muted-foreground"> "what does prabhakar build?"</span>
+      </p>
+      <p className="text-muted-foreground">
+        <span className="text-foreground">↳ embed</span> · semantic chunks → vectors
+      </p>
+      <p className="text-muted-foreground">
+        <span className="text-foreground">↳ retrieve</span> · qdrant · hybrid + rerank · top_k=5
+      </p>
+      <p className="text-muted-foreground">
+        <span className="text-foreground">↳ generate</span> · llm · grounded
+      </p>
+      <div className="rounded-sm border-l-2 border-primary bg-muted/60 px-3 py-2.5 font-sans text-[13.5px] leading-relaxed text-foreground">
+        AI products that actually ship — RAG pipelines, learning assistants and agentic
+        workflows, plus the fast, clean Next.js interfaces people use them through.
+        <span className="ml-0.5 inline-block h-4 w-[7px] translate-y-[3px] bg-primary animate-blink" />
+      </div>
+    </div>
+  </div>
+);
 
 export const Hero = () => {
-  const scrollToSection = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-  };
-
   return (
-    <section className="relative min-h-screen flex items-center justify-center px-4 py-20 overflow-hidden">
-      {/* Animated background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-accent/10" />
-      <div className="absolute inset-0">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/20 rounded-full blur-3xl animate-pulse delay-1000" />
-      </div>
+    <section id="top" className="relative overflow-hidden pt-28 md:pt-36">
+      <HeroBackground />
 
-      {/* Floating particles */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(20)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-2 h-2 bg-primary/30 rounded-full"
-            initial={{
-              x: Math.random() * window.innerWidth,
-              y: Math.random() * window.innerHeight,
-            }}
-            animate={{
-              y: [0, -30, 0],
-              opacity: [0, 1, 0],
-            }}
-            transition={{
-              duration: 3 + Math.random() * 2,
-              repeat: Infinity,
-              delay: Math.random() * 2,
-            }}
-          />
-        ))}
-      </div>
-
-      <div className="max-w-5xl mx-auto text-center space-y-6 relative z-10">
-        {/* Welcome Badge */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-        >
-          <span className="px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium">
-            👋 Welcome to my portfolio
-          </span>
-        </motion.div>
-
-        {/* Main Title */}
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="text-5xl md:text-7xl font-bold leading-tight"
-        >
-          I'm{" "}
-          <span className="gradient-text inline-block">
-            Prabhakar Tiwari
-          </span>
-        </motion.h1>
-
-        {/* Role & Tech Stack */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
-          className="space-y-3"
-        >
-          <p className="text-2xl md:text-3xl font-semibold text-foreground/80">
-            Generative AI Engineer
-          </p>
-
-          <div className="flex justify-center flex-wrap gap-2">
-            {["Next.js", "React.js", "Python", "FastAPI", "RAG"].map((tech) => (
-              <span
-                key={tech}
-                className="px-3 py-1 bg-accent/10 text-accent rounded-full text-sm font-medium"
-              >
-                {tech}
-              </span>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* About Text */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7 }}
-          className="text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto"
-        >
-          Building AI-powered products and scalable web apps with around 4 years
-          of experience. Hands-on with LLMs, RAG, and agentic workflows, plus
-          clean, maintainable full-stack code.
-        </motion.p>
-
-        {/* Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8 }}
-          className="flex justify-center flex-wrap gap-4 pt-4"
-        >
-          <Button
-            onClick={() => scrollToSection("contact")}
-            size="lg"
-            className="group relative overflow-hidden bg-gradient-to-r from-primary to-accent hover:shadow-lg hover:shadow-primary/50 transition-all"
-          >
-            <span className="relative z-10 flex items-center gap-2">
-              <Mail className="h-5 w-5" />
-              Let's Talk
+      <div className="container-page relative">
+        <motion.div {...fade(0)} className="mb-10 flex flex-wrap items-center gap-x-6 gap-y-2">
+          <span className="eyebrow flex items-center gap-2">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-60" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
             </span>
-          </Button>
-
-          <Button variant="outline" size="lg" asChild>
-            <a
-              href="/Prabhakar_Tiwari_Resume.pdf"
-              download="Prabhakar_Tiwari_Resume.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Download className="mr-2 h-5 w-5" />
-              Download CV
-            </a>
-          </Button>
-
-
-          <Button variant="outline" size="lg" asChild>
-            <a href="tel:7073150463">
-              <Phone className="mr-2 h-5 w-5" />
-              Call Me
-            </a>
-          </Button>
-
-          <Button variant="outline" size="lg" asChild>
-            <a
-              href="https://linkedin.com/in/prabhakar-tiwari-619169249/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Linkedin className="h-5 w-5" />
-            </a>
-          </Button>
+            Currently Generative AI Engineer @ TalentGum
+          </span>
+          <span className="eyebrow">Jaipur, India</span>
         </motion.div>
-      </div>
 
-      {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.5 }}
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 cursor-pointer"
-        onClick={() => scrollToSection("skills")}
-      >
-        <div className="flex flex-col items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-          <span className="text-sm">Scroll to explore</span>
-          <motion.div
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-          >
-            <ArrowDown className="h-5 w-5" />
+        <div className="grid items-end gap-12 lg:grid-cols-12">
+          <div className="lg:col-span-7">
+            <motion.h1
+              {...fade(0.08)}
+              className="font-serif text-[clamp(3.25rem,9vw,7.5rem)] leading-[0.92] tracking-tight"
+            >
+              Prabhakar
+              <br />
+              <span className="italic text-primary">Tiwari</span>
+            </motion.h1>
+
+            <motion.p
+              {...fade(0.18)}
+              className="mt-8 max-w-xl text-lg leading-relaxed text-muted-foreground md:text-xl"
+            >
+              Generative AI Engineer building{" "}
+              <span className="text-foreground">RAG systems, AI agents and LLM-powered products</span>
+              {" "}— and the scalable web apps that put them in people's hands.
+            </motion.p>
+
+            <motion.div {...fade(0.28)} className="mt-10 flex flex-wrap items-center gap-3">
+              <button
+                onClick={openChatbot}
+                className="group inline-flex h-11 items-center gap-2 rounded-sm bg-primary px-5 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5"
+              >
+                <Sparkles className="h-4 w-4" />
+                Ask my AI assistant
+              </button>
+              <a
+                href="#contact"
+                className="group inline-flex h-11 items-center gap-2 rounded-sm border border-foreground/20 px-5 text-sm font-medium transition-colors hover:border-foreground"
+              >
+                Get in touch
+                <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+              </a>
+              <div className="ml-1 flex items-center gap-1">
+                {[
+                  { href: "mailto:prabhakartiwari0209@gmail.com", icon: Mail, label: "Email" },
+                  { href: "tel:7073150463", icon: Phone, label: "Call" },
+                  {
+                    href: "https://linkedin.com/in/prabhakar-tiwari-619169249/",
+                    icon: Linkedin,
+                    label: "LinkedIn",
+                  },
+                ].map(({ href, icon: Icon, label }) => (
+                  <a
+                    key={label}
+                    href={href}
+                    aria-label={label}
+                    target={href.startsWith("http") ? "_blank" : undefined}
+                    rel="noopener noreferrer"
+                    className="flex h-11 w-11 items-center justify-center rounded-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                  >
+                    <Icon className="h-[18px] w-[18px]" />
+                  </a>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+
+          <motion.div {...fade(0.35)} className="lg:col-span-5">
+            <TerminalCard />
           </motion.div>
         </div>
-      </motion.div>
+
+        <motion.dl
+          {...fade(0.45)}
+          className="mt-20 grid grid-cols-1 border-t border-border sm:grid-cols-3 md:mt-28"
+        >
+          {stats.map((s, i) => (
+            <div
+              key={s.label}
+              className={`py-6 sm:px-6 ${i > 0 ? "border-t border-border sm:border-l sm:border-t-0" : "sm:pl-0"}`}
+            >
+              <dt className="eyebrow mb-2">{s.label}</dt>
+              <dd className="font-serif text-3xl tracking-tight">{s.value}</dd>
+            </div>
+          ))}
+        </motion.dl>
+      </div>
     </section>
   );
 };

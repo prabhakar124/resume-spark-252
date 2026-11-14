@@ -1,6 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Briefcase, Calendar, CheckCircle2 } from "lucide-react";
-import { motion } from "framer-motion";
+import { Reveal, SectionHeader } from "@/components/Section";
 
 const experiences = [
   {
@@ -43,145 +41,52 @@ const experiences = [
 
 export const Experience = () => {
   return (
-    <section id="experience" className="py-20 px-4 bg-muted/30 relative overflow-hidden">
-      {/* Background decorations */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5" />
-      <div className="absolute top-1/4 right-0 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-1/4 left-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
+    <section id="experience" className="py-24 md:py-32">
+      <div className="container-page">
+        <SectionHeader
+          index="01"
+          label="Experience"
+          title={
+            <>
+              Where I've been <em className="text-primary">building</em>.
+            </>
+          }
+          intro="From full-stack web apps to production LLM systems — each role pushed further into AI."
+        />
 
-      <div className="max-w-6xl mx-auto relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <span className="inline-block px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium mb-4">
-            Career Journey
-          </span>
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            <span className="gradient-text">Work Experience</span>
-          </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Building innovative solutions and growing with every project
-          </p>
-        </motion.div>
-
-        <div className="relative">
-          {/* Timeline line */}
-          <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-accent to-transparent hidden md:block" />
-
-          <div className="space-y-12">
-            {experiences.map((exp, idx) => (
-              <motion.div
-                key={exp.company}
-                initial={{ opacity: 0, x: idx % 2 === 0 ? -50 : 50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: idx * 0.2 }}
-                className={`relative flex items-center ${
-                  idx % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
-                } flex-col gap-8`}
-              >
-                {/* Timeline dot */}
-                <div className="absolute left-8 md:left-1/2 transform md:-translate-x-1/2 w-16 h-16 hidden md:flex items-center justify-center">
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary to-accent rounded-full animate-pulse" />
-                  <div className="relative w-12 h-12 bg-background rounded-full flex items-center justify-center border-4 border-primary/20">
-                    <Briefcase className="h-6 w-6 text-primary" />
-                  </div>
+        <ol>
+          {experiences.map((exp, i) => (
+            <Reveal key={exp.company} delay={i * 0.05}>
+              <li className="group grid gap-6 border-t border-border py-10 md:grid-cols-12 md:gap-8">
+                <div className="md:col-span-3">
+                  <p className="font-mono text-xs text-muted-foreground">{exp.period}</p>
+                  {exp.current && (
+                    <span className="mt-3 inline-flex items-center gap-1.5 rounded-sm bg-primary/10 px-2 py-0.5 font-mono text-[11px] uppercase tracking-wider text-primary">
+                      <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+                      Now
+                    </span>
+                  )}
                 </div>
 
-                {/* Card */}
-                <div className="w-full md:w-[calc(50%-4rem)]">
-                  <Card className="group relative overflow-hidden border-2 hover:border-primary/30 transition-all duration-300 hover:shadow-2xl hover:shadow-primary/20 bg-gradient-to-br from-card to-card/50 backdrop-blur">
-                    {/* Gradient overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-                    <CardHeader className="relative z-10">
-                      <div className="flex items-start gap-4">
-                        <div className="p-3 rounded-xl bg-gradient-to-br from-primary/10 to-accent/10 group-hover:scale-110 transition-transform duration-300 flex-shrink-0">
-                          <Briefcase className="h-6 w-6 text-primary" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-3 flex-wrap mb-2">
-                            <CardTitle className="text-2xl group-hover:text-primary transition-colors">
-                              {exp.role}
-                            </CardTitle>
-                            {exp.current && (
-                              <span className="px-3 py-1 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-full text-xs font-bold shadow-lg">
-                                Current
-                              </span>
-                            )}
-                          </div>
-                          <p className="text-lg font-semibold text-muted-foreground mb-2">
-                            {exp.company}
-                          </p>
-                          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary border border-primary/20">
-                            <Calendar className="h-4 w-4" />
-                            <span className="text-sm font-medium">{exp.period}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </CardHeader>
-
-                    <CardContent className="relative z-10">
-                      <ul className="space-y-3">
-                        {exp.achievements.map((achievement, achIdx) => (
-                          <motion.li
-                            key={achIdx}
-                            initial={{ opacity: 0, x: idx % 2 === 0 ? -20 : 20 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: 0.1 * achIdx }}
-                            className="flex items-start gap-3 group/item"
-                          >
-                            <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 flex-shrink-0 group-hover/item:scale-125 transition-transform" />
-                            <span className="text-muted-foreground leading-relaxed">
-                              {achievement}
-                            </span>
-                          </motion.li>
-                        ))}
-                      </ul>
-                    </CardContent>
-
-                    {/* Corner decoration */}
-                    <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-primary/10 to-transparent rounded-tr-full" />
-                  </Card>
+                <div className="md:col-span-4">
+                  <h3 className="font-serif text-3xl leading-tight tracking-tight transition-colors group-hover:text-primary">
+                    {exp.company}
+                  </h3>
+                  <p className="mt-1 text-sm font-medium text-muted-foreground">{exp.role}</p>
                 </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
 
-        {/* Summary stats */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.4 }}
-          className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6"
-        >
-          {[
-            { label: "Total Experience", value: "4 Years" },
-            { label: "Companies Worked", value: "3" },
-            { label: "Key Projects", value: "3+" },
-          ].map((stat, idx) => (
-            <motion.div
-              key={stat.label}
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.5 + idx * 0.1 }}
-              className="text-center p-6 rounded-2xl bg-gradient-to-br from-card to-card/50 backdrop-blur border border-border/50 hover:border-primary/30 transition-all hover:shadow-lg"
-            >
-              <div className="text-3xl font-bold gradient-text mb-2">
-                {stat.value}
-              </div>
-              <div className="text-sm text-muted-foreground">{stat.label}</div>
-            </motion.div>
+                <ul className="space-y-3 md:col-span-5">
+                  {exp.achievements.map((a) => (
+                    <li key={a} className="flex gap-3 text-[15px] leading-relaxed text-muted-foreground">
+                      <span className="mt-[9px] h-px w-3 shrink-0 bg-primary" />
+                      <span>{a}</span>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            </Reveal>
           ))}
-        </motion.div>
+        </ol>
       </div>
     </section>
   );

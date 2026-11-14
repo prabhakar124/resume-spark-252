@@ -60,6 +60,16 @@ export const Chatbot = () => {
     }
   }, []);
 
+  // Allow other parts of the page (e.g. the hero CTA) to open the chat
+  useEffect(() => {
+    const open = () => {
+      setIsOpen(true);
+      setShowTooltip(false);
+    };
+    window.addEventListener("open-chatbot", open);
+    return () => window.removeEventListener("open-chatbot", open);
+  }, []);
+
   const handleCloseTooltip = () => {
     setShowTooltip(false);
     localStorage.setItem("chatbot_tooltip_seen", "true");
@@ -232,11 +242,11 @@ export const Chatbot = () => {
           {/* Tooltip for new users */}
           {showTooltip && (
             <div className="fixed bottom-20 right-4 md:bottom-24 md:right-6 w-[280px] md:w-[320px] z-50 animate-fade-in-up">
-              <div className="relative bg-gradient-to-br from-primary to-accent text-primary-foreground rounded-2xl shadow-[0_10px_40px_-10px_hsl(var(--primary)/0.5)] p-4">
+              <div className="relative bg-primary text-primary-foreground rounded-2xl shadow-[0_10px_40px_-10px_hsl(var(--primary)/0.5)] p-4">
                 {/* Close button */}
                 <button
                   onClick={handleCloseTooltip}
-                  className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center rounded-full hover:bg-primary-foreground/20 transition-colors"
+                  className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center rounded-full hover:bg-black/10 transition-colors"
                   aria-label="Close tooltip"
                 >
                   <X className="h-4 w-4" />
@@ -250,7 +260,7 @@ export const Chatbot = () => {
                 </div>
 
                 {/* Arrow pointing to chatbot */}
-                <div className="absolute -bottom-2 right-8 w-4 h-4 bg-accent rotate-45"></div>
+                <div className="absolute -bottom-2 right-8 w-4 h-4 bg-primary rotate-45"></div>
               </div>
             </div>
           )}
@@ -259,10 +269,10 @@ export const Chatbot = () => {
           <button
             onClick={() => setIsOpen(true)}
             aria-label="Open chat"
-            className="group fixed bottom-4 right-4 md:bottom-6 md:right-6 h-12 w-12 md:h-14 md:w-14 rounded-full z-50 flex items-center justify-center bg-gradient-to-br from-primary to-accent text-primary-foreground shadow-[0_8px_30px_-6px_hsl(var(--primary)/0.6)] transition-all duration-300 hover:scale-110 hover:shadow-[0_12px_40px_-6px_hsl(var(--accent)/0.7)] active:scale-95"
+            className="group fixed bottom-4 right-4 md:bottom-6 md:right-6 h-12 w-12 md:h-14 md:w-14 rounded-full z-50 flex items-center justify-center bg-primary text-primary-foreground shadow-[0_8px_30px_-6px_hsl(var(--primary)/0.6)] transition-all duration-300 hover:scale-110 hover:shadow-[0_12px_40px_-6px_hsl(var(--primary)/0.7)] active:scale-95"
           >
             {/* Pulse ring */}
-            <span className="absolute inset-0 rounded-full bg-gradient-to-br from-primary to-accent opacity-40 animate-ping [animation-duration:2.5s]" />
+            <span className="absolute inset-0 rounded-full bg-primary opacity-40 animate-ping [animation-duration:2.5s]" />
             <MessageCircle className="relative h-5 w-5 md:h-6 md:w-6 transition-transform duration-300 group-hover:-rotate-12" />
           </button>
         </>
@@ -271,15 +281,15 @@ export const Chatbot = () => {
       {isOpen && (
         <Card className="fixed bottom-4 right-4 md:bottom-6 md:right-6 w-[calc(100vw-2rem)] max-w-[400px] h-[calc(100vh-8rem)] max-h-[600px] z-50 flex flex-col overflow-hidden rounded-2xl border-border/50 bg-card/95 backdrop-blur-xl shadow-[0_20px_60px_-15px_hsl(var(--primary)/0.4)] animate-scale-in">
           {/* Gradient top accent bar */}
-          <div className="h-1 w-full bg-gradient-to-r from-primary via-accent to-primary bg-[length:200%_100%] animate-[gradient-shift_3s_ease_infinite]" />
+          <div className="h-1 w-full bg-primary" />
 
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3 border-b border-border/50">
             <div className="flex items-center gap-2.5">
-              <div className="h-9 w-9 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-md">
+              <div className="h-9 w-9 rounded-full bg-primary flex items-center justify-center shadow-md">
                 <MessageCircle className="h-[18px] w-[18px] text-primary-foreground" />
               </div>
               <div>
-                <CardTitle className="text-base md:text-lg gradient-text">Ask About Prabhakar</CardTitle>
+                <CardTitle className="font-serif text-xl font-normal tracking-tight">Ask About Prabhakar</CardTitle>
                 <p className="text-[10px] text-muted-foreground flex items-center gap-1">
                   <span className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
                   AI Assistant • Online
@@ -308,7 +318,7 @@ export const Chatbot = () => {
                      <div
                       className={`max-w-[85%] px-3 py-2 md:px-4 md:py-2.5 shadow-sm ${
                         msg.role === "user"
-                          ? "bg-gradient-to-br from-primary to-accent text-primary-foreground rounded-2xl rounded-br-md"
+                          ? "bg-primary text-primary-foreground rounded-2xl rounded-br-md"
                           : "bg-muted/80 text-foreground rounded-2xl rounded-bl-md border border-border/40"
                       }`}
                     >
@@ -325,7 +335,7 @@ export const Chatbot = () => {
                        msg.content.toLowerCase().includes("contact prabhakar") && (
                         <Button
                           size="sm"
-                          className="mt-2 w-full text-xs bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-opacity"
+                          className="mt-2 w-full text-xs bg-primary hover:opacity-90 transition-opacity"
                           onClick={() => window.location.href = "mailto:prabhakartiwari0209@gmail.com"}
                         >
                           Contact via Email
@@ -338,9 +348,9 @@ export const Chatbot = () => {
                   <div className="flex justify-start animate-message-in">
                     <div className="bg-muted/80 border border-border/40 rounded-2xl rounded-bl-md px-3 py-2 md:px-4 md:py-2.5">
                       <div className="flex gap-1">
-                        <div className="w-2 h-2 rounded-full bg-gradient-to-br from-primary to-accent animate-bounce" />
-                        <div className="w-2 h-2 rounded-full bg-gradient-to-br from-primary to-accent animate-bounce [animation-delay:0.1s]" />
-                        <div className="w-2 h-2 rounded-full bg-gradient-to-br from-primary to-accent animate-bounce [animation-delay:0.2s]" />
+                        <div className="w-2 h-2 rounded-full bg-primary animate-bounce" />
+                        <div className="w-2 h-2 rounded-full bg-primary animate-bounce [animation-delay:0.1s]" />
+                        <div className="w-2 h-2 rounded-full bg-primary animate-bounce [animation-delay:0.2s]" />
                       </div>
                     </div>
                   </div>
@@ -376,7 +386,7 @@ export const Chatbot = () => {
                       type="submit"
                       size="icon"
                       disabled={isLoading || !input.trim()}
-                      className="rounded-xl bg-gradient-to-br from-primary to-accent hover:opacity-90 hover:scale-105 transition-all disabled:opacity-50"
+                      className="rounded-xl bg-primary hover:opacity-90 hover:scale-105 transition-all disabled:opacity-50"
                     >
                       <Send className="h-4 w-4" />
                     </Button>
